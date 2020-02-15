@@ -12,8 +12,7 @@ namespace RSocket.Core.Extensions
             if (sequence.TryGet(ref position, out var prefix, false)&&2<prefix.Length)
             {
                 var memory = prefix.Slice(0, RSocketProtocol.MESSAGEFRAMESIZE).ToArray();
-                //return memory.TryRead(out byte b1) && reader.TryRead(out byte b2) && reader.TryRead(out byte b3)
-                return ((memory[0] << 8 * 2) | (memory[1] << 8 * 1) | (memory[2] << 8), true);
+                return ((memory[0] << 8 * 2) | (memory[1] << 8 * 1) | memory[2], true);
             }
 
             return (0, false);

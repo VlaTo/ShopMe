@@ -132,13 +132,13 @@
     <PackageReference Include="Prism.Unity.Forms" Version="7.2.0.1422" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\ShopMe.Client\ShopMe.Client.csproj">
-      <Project>{3C40A570-1751-451F-9784-EE7078E20E87}</Project>
-      <Name>ShopMe.Client</Name>
-    </ProjectReference>
+    <None Include="ShopMe.UWP_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="ShopMe.UWP_TemporaryKey.pfx" />
+    <ProjectReference Include="..\ShopMe.Client\ShopMe.Client.csproj">
+      <Project>{3c40a570-1751-451f-9784-ee7078e20e87}</Project>
+      <Name>ShopMe.Client</Name>
+    </ProjectReference>
   </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>

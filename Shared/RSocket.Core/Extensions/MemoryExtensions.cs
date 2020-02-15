@@ -21,6 +21,18 @@ namespace RSocket.Core.Extensions
             return RSocketProtocol.MESSAGEFRAMESIZE;
         }
 
+        public static int PeekLength(this Memory<byte> memory)
+        {
+            var span = memory.Span;
+
+            if (RSocketProtocol.MESSAGEFRAMESIZE > span.Length)
+            {
+                throw new InvalidOperationException();
+            }
+
+            return ((span[0] << 16) & 0xFF) | ((span[1] << 8) & 0xFF) | (span[2] & 0xFF);
+        }
+
         public static int CopyFrame(this Memory<byte> memory, PipeWriter pipe, int length)
         {
             //var count = RSocketProtocol.MESSAGEFRAMESIZE + length;

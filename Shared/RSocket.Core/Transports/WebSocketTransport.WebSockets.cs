@@ -3,6 +3,7 @@ using System.Buffers;
 using System.Collections.Generic;
 using System.IO.Pipelines;
 using System.Net.WebSockets;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -126,16 +127,18 @@ namespace RSocket.Core.Transports
                     {
                         // Do a 0 byte read so that idle connections don't allocate a buffer when waiting for a read
                         //var result = await socket.ReceiveAsync(Memory<byte>.Empty, cancellationToken);
-                        var result = await socket.ReceiveAsync(new ArraySegment<byte>(), cancellationToken);
+                        //var result = await socket.ReceiveAsync(new ArraySegment<byte>(), cancellationToken);
 
-                        if (result.MessageType == WebSocketMessageType.Close)
-                        {
-                            return;
-                        }
+                        //if (result.MessageType == WebSocketMessageType.Close)
+                        //{
+                        //    return;
+                        //}
 
-                        var memory = new Memory<byte>(bytes);
+                        var memory = pipe.Output.GetMemory();
+                        //var memory = new Memory<byte>(bytes);
                         var frame = memory.Slice(RSocketProtocol.MESSAGEFRAMESIZE);
-                        var segment = new ArraySegment<byte>(frame.ToArray());
+                        //var segment = new ArraySegment<byte>(frame.ToArray());
+                        var hasSegment = MemoryMarshal.TryGetArray<byte>(frame, out var segment);
 
                         // Exceptions are handled above where the send and receive tasks are being run.
                         var receiveResult = await socket.ReceiveAsync(segment, cancellationToken);

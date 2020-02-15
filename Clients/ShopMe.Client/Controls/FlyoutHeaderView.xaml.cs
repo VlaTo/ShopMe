@@ -3,13 +3,16 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using Xamarin.Forms;
 
-namespace ShopMe.Client.Views
+using Xamarin.Forms;
+using Xamarin.Forms.Xaml;
+
+namespace ShopMe.Client.Controls
 {
-    public partial class MainPage : ContentPage
+    [XamlCompilation(XamlCompilationOptions.Compile)]
+    public partial class FlyoutHeaderView : ContentView
     {
-        public MainPage()
+        public FlyoutHeaderView()
         {
             InitializeComponent();
         }

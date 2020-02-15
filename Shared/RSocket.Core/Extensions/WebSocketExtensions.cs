@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Net.WebSockets;
+using System.Runtime.InteropServices;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -17,7 +18,28 @@ namespace RSocket.Core.Extensions
             ILogger logger,
             CancellationToken cancellationToken = default)
         {
-            while (true)
+            for (
+                var frame = buffer.Slice(position).PeekFrame(); 
+                frame.Length > 0; 
+                frame = buffer.Slice(position).PeekFrame())
+            {
+                //Console.WriteLine($"Send Frame[{frame.Length}]");
+                var offset = buffer.GetPosition(RSocketProtocol.MESSAGEFRAMESIZE, position);
+                if (buffer.Slice(offset).Length < frame.Length)
+                {
+                    break;
+                }    //If there is a partial message in the buffer, yield to accumulate more. Can't compare SequencePositions...
+
+                var sequence = buffer.Slice(offset, frame.Length);
+                var hasSegment = MemoryMarshal.TryGetArray(sequence.First, out var segment);
+
+                await socket.SendAsync(segment, messageType, frame.IsEndOfMessage, cancellationToken);
+
+                position = buffer.GetPosition(frame.Length, offset);
+            }
+
+
+            /*while (true)
             {
                 var payload = buffer.Slice(position);
                 var frame = payload.PeekFrame();
@@ -36,7 +58,7 @@ namespace RSocket.Core.Extensions
 
                 //position = buffer.GetPosition(frame.Length, position);
                 position = buffer.GetPosition(RSocketProtocol.MESSAGEFRAMESIZE + frame.Length, position);
-            }
+            }*/
 
             /*for (var frame = buffer.Slice(position).PeekFrame();
                 0 < frame.Length;
@@ -97,5 +119,14 @@ namespace RSocket.Core.Extensions
                 logger.SocketDataSend(memory, 0L == count);
             }
         }
+
+        /*private static (int Length, bool IsEndOfMessage) PeekFrame(ReadOnlySequence<byte> sequence)
+        {
+            var reader = new SequenceReader<byte>(sequence); 
+            return reader.TryRead(out byte b1) 
+                   && reader.TryRead(out byte b2) 
+                   && reader.TryRead(out byte b3) 
+                ? ((b1 << 8 * 2) | (b2 << 8 * 1) | (b3 << 8 * 0), true) : (0, false);
+        }*/
     }
 }

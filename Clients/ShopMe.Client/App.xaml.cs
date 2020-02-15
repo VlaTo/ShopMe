@@ -1,6 +1,10 @@
-﻿using Prism;
+﻿using System.Threading;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
+using Prism;
 using Prism.Ioc;
 using RSocket.Core;
+using RSocket.Core.Transports;
 using ShopMe.Client.Services;
 using ShopMe.Client.ViewModels;
 using ShopMe.Client.Views;
@@ -27,9 +31,13 @@ namespace ShopMe.Client
         {
         }
 
-        protected override void OnInitialized()
+        protected override async void OnInitialized()
         {
             InitializeComponent();
+
+            var client = Container.Resolve<RSocketClient>();
+
+            await client.ConnectAsync(CancellationToken.None);
 
             MainPage = new AppShell();
 
@@ -44,12 +52,19 @@ namespace ShopMe.Client
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             //Services
-            containerRegistry.RegisterSingleton<RSocketClient>();
+            containerRegistry.RegisterInstance(ConnectClient());
             containerRegistry.RegisterSingleton<IShopListService, RSocketShopListService>();
 
             //Registering Views+ViewModels
-            //containerRegistry.RegisterForNavigation<NavigationPage>();
-            containerRegistry.RegisterForNavigation<MainPage, MainPageViewModel>();
+            containerRegistry.RegisterForNavigation<MainContentPage, MainContentPageViewModel>();
+            containerRegistry.RegisterForNavigation<AboutPage, AboutPageViewModel>();
+        }
+
+        private static RSocketClient ConnectClient()
+        {
+            var factory = new NullLoggerFactory();
+            var transport = new ClientWebSocketTransport("ws://localhost:5000/api", factory.CreateLogger<WebSocketTransport>());
+            return new RSocketClient(transport);
         }
     }
 }

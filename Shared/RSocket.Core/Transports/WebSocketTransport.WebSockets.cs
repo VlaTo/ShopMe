@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO.Pipelines;
 using System.Net.WebSockets;
 using System.Runtime.InteropServices;
@@ -137,11 +138,12 @@ namespace RSocket.Core.Transports
                         var memory = pipe.Output.GetMemory();
                         //var memory = new Memory<byte>(bytes);
                         var frame = memory.Slice(RSocketProtocol.MESSAGEFRAMESIZE);
-                        //var segment = new ArraySegment<byte>(frame.ToArray());
-                        var hasSegment = MemoryMarshal.TryGetArray<byte>(frame, out var segment);
+                        var hasArray = MemoryMarshal.TryGetArray<byte>(frame, out var array);
+                        
+                        Debug.Assert(hasArray);
 
                         // Exceptions are handled above where the send and receive tasks are being run.
-                        var receiveResult = await socket.ReceiveAsync(segment, cancellationToken);
+                        var receiveResult = await socket.ReceiveAsync(array, cancellationToken);
 
                         // Need to check again for netcoreapp3.0 because a close can happen between a 0-byte read and the actual read
                         if (receiveResult.MessageType == WebSocketMessageType.Close)
@@ -199,6 +201,8 @@ namespace RSocket.Core.Transports
 
                 try
                 {
+                    var messageType = GetMessageType(transferFormat);
+
                     while (true)
                     {
                         var result = await pipe.Input.ReadAsync();
@@ -218,8 +222,8 @@ namespace RSocket.Core.Transports
                                 {
                                     if (WebSocketCanSend(socket))
                                     {
-                                        var messageType = GetMessageType(transferFormat);
-                                        consumed = await socket.SendAsync(buffer, buffer.Start, messageType, logger); //RSOCKET Framing
+                                        //consumed = await socket.SendAsync(buffer, buffer.Start, messageType, logger); //RSOCKET Framing
+                                        consumed = await socket.SendAsync(buffer, consumed, messageType, logger); //RSOCKET Framing
                                     }
                                     else
                                     {

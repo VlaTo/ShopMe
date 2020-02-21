@@ -10,7 +10,7 @@ namespace LibraProgramming.Serialization.Hessian
     /// <summary>
     /// 
     /// </summary>
-    public class ObjectElement : ISerializationElement
+    internal class ObjectElement : ISerializationElement
     {
         private string classname;
 

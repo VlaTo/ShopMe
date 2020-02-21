@@ -29,5 +29,7 @@
         public const byte BeginList = (byte) 'U';// 0x55;
         public const byte FixedLengthList = (byte) 'V';// 0x56;
         public const byte EndList = (byte)'Z'; //0x??;
+        public const byte RPCCall = (byte)'C';// 0x43;
+        public const byte Hessian = (byte)'H';// 0x??;
     }
 }

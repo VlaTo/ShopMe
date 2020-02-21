@@ -12,6 +12,7 @@ using RSocket.Core;
 using RSocket.Core.Transports;
 using ShopMe.Models;
 using ShopMe.Models.Commands;
+using ShopMe.Models.Services;
 
 namespace ShopMe.Console
 {
@@ -22,22 +23,30 @@ namespace ShopMe.Console
             var loggerFactory = new NullLoggerFactory();
             var transport = new ClientWebSocketTransport("ws://localhost:5000/api", loggerFactory.CreateLogger<WebSocketTransport>());
             var client = new RSocketClient(transport);
-            var invoker = new DefaultCallInvoker(null);
+            var service = new ShopListApiClient(client);
+            //var invoker = new DefaultCallInvoker(null);
             
-            RetrieveListAsync(client, invoker).Wait();
+            RetrieveListAsync(service, client).Wait();
 
             System.Console.WriteLine("Press key to close");
             System.Console.ReadLine();
         }
 
-        private static async Task RetrieveListAsync(RSocketClient client, CallInvoker invoker)
+        private static async Task RetrieveListAsync(IShopListApi api, RSocketClient client)
         {
             await client.ConnectAsync(default);
 
             //System.Console.WriteLine("Press key");
             //System.Console.ReadLine();
 
-            const string command = "shoplists";
+            await foreach (var description in api.GetAllListsAsync())
+            {
+                System.Console.WriteLine($"List title: {description.Title}");
+            }
+
+            System.Console.WriteLine("Done");
+
+            /*const string command = "shoplists";
             var bytes = Encoding.UTF8.GetBytes(command);
             var method = new Method<GetShopListsCommand, List<ShopListDescription>>(MethodType.ServerStreaming, "GetShopLists");
             var call = invoker.CreateAsyncCall(method, "localhost", new CallOptions(), new GetShopListsCommand());
@@ -68,7 +77,7 @@ namespace ShopMe.Console
                 () =>
                 {
                     System.Console.WriteLine("Done");
-                });
+                });*/
         }
     }
 }

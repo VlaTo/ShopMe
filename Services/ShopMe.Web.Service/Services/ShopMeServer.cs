@@ -1,13 +1,16 @@
 ﻿using System;
 using System.Buffers;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using LibraProgramming.Serialization.Hessian;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using RSocket.Core;
+using ShopMe.Models.Services;
 
 namespace ShopMe.Web.Service.Services
 {
@@ -25,7 +28,18 @@ namespace ShopMe.Web.Service.Services
             this.mediator = mediator;
 
             Stream(
-                request => request.Data,
+                request =>
+                {
+                    //var bytes = ReadOnlySequence<byte>.Empty;
+                    /*var methodInfo = typeof(IShopListApi).GetMethod(nameof(IShopListApi.GetAllListsAsync));
+                    var hessianCall = new HessianCall(methodInfo);
+                    using (var stream = new MemoryStream(request.Data.ToArray()))
+                    {
+                        hessianCall.ReadCall(stream);
+                        bytes = new ReadOnlySequence<byte>(stream.ToArray());
+                    }*/
+                    return request.Data;
+                },
                 request =>
                 {
                     var command = Encoding.UTF8.GetString(request.ToArray());

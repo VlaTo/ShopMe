@@ -12,6 +12,7 @@ namespace LibraProgramming.Serialization.Hessian
     {
         public Type ObjectType
         {
+            //TODO: think about returning Element.ObjectType
             get;
         }
 
@@ -32,6 +33,21 @@ namespace LibraProgramming.Serialization.Hessian
             var element = CreateSerializationElement(type, catalog, factory);
 
             return new HessianSerializationScheme(type, element);
+        }
+
+        public static HessianSerializationScheme CreateFromMethod(MethodInfo methodInfo, IObjectSerializerFactory factory)
+        {
+            var catalog = new Dictionary<Type, ISerializationElement>();
+            var element = new MethodCallElement(methodInfo);
+            var methodArguments = methodInfo.GetParameters();
+
+            foreach (var argument in methodArguments)
+            {
+                var argumentElement = CreateSerializationElement(argument.ParameterType, catalog, factory);
+                element.Arguments.Add(argumentElement);
+            }
+
+            return new HessianSerializationScheme(null, element);
         }
 
         public void Serialize(HessianOutputWriter writer, object graph, HessianSerializationContext context)

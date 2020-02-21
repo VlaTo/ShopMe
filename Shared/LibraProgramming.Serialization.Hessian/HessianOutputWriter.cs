@@ -428,5 +428,34 @@ namespace LibraProgramming.Serialization.Hessian
 
             return disposer;
         }
+
+        public virtual IDisposable BeginCall(string methodName)
+        {
+            // hessian version
+            Stream.WriteByte(Marker.Hessian);
+            Stream.WriteByte(0x02);
+            Stream.WriteByte(0x00);
+            // RPC call packet
+            Stream.WriteByte(Marker.RPCCall);
+
+            WriteString(methodName);
+
+            var scope = new object();
+            var disposer = new DisposeAction<object>(scope, context =>
+            {
+                var top = arrays.Pop();
+
+                if (top.Context != context)
+                {
+                    throw new HessianSerializerException();
+                }
+
+                //Stream.WriteByte(Marker.EndList);
+            });
+
+            arrays.Push(disposer);
+
+            return disposer;
+        }
     }
 }

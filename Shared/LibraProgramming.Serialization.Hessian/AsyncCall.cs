@@ -75,7 +75,7 @@ namespace LibraProgramming.Serialization.Hessian
 
         public Task SendCloseFromClientAsync()
         {
-            return TaskEx.CompletedTask;
+            return Task.CompletedTask;
         }
 
         protected override void OnClientResponse(bool success, TaskCompletionSource<TResponse> tcs, byte[] payload)

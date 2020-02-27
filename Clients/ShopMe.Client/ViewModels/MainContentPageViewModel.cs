@@ -22,7 +22,7 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
-        public ObservableCollection<ShopListDescription> Items
+        public ObservableCollection<ShopListDescriptionViewModel> Items
         {
             get; 
         }
@@ -33,7 +33,7 @@ namespace ShopMe.Client.ViewModels
             this.navigationService = navigationService;
             cts = new CancellationTokenSource();
 
-            Items = new ObservableCollection<ShopListDescription>();
+            Items = new ObservableCollection<ShopListDescriptionViewModel>();
             BackCommand = new DelegateCommand(async () => await this.navigationService.GoBackAsync());
         }
 
@@ -61,7 +61,7 @@ namespace ShopMe.Client.ViewModels
 
             service.GetLists(cts.Token).Subscribe(async list =>
             {
-                var model = new ShopListDescription
+                var model = new ShopListDescriptionViewModel
                 {
                     Title = list.Title
                 };

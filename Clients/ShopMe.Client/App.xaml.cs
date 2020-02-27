@@ -8,6 +8,7 @@ using RSocket.Core.Transports;
 using ShopMe.Client.Services;
 using ShopMe.Client.ViewModels;
 using ShopMe.Client.Views;
+using ShopMe.Models.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -53,6 +54,7 @@ namespace ShopMe.Client
         {
             //Services
             containerRegistry.RegisterInstance(ConnectClient());
+            containerRegistry.RegisterSingleton<IShopListApi, ShopListApiClient>();
             containerRegistry.RegisterSingleton<IShopListService, RSocketShopListService>();
 
             //Registering Views+ViewModels

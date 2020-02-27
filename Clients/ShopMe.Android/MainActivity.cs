@@ -16,7 +16,8 @@ namespace ShopMe.Droid
 
             base.OnCreate(bundle);
 
-            global::Xamarin.Forms.Forms.Init(this, bundle);
+            Xamarin.Forms.Forms.SetFlags("SwipeView_Experimental", "StateTriggers_Experimental");
+            Xamarin.Forms.Forms.Init(this, bundle);
 
             LoadApplication(new Client.App(new AndroidInitializer()));
         }

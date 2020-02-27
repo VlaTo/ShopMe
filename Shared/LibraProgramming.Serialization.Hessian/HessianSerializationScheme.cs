@@ -182,7 +182,7 @@ namespace LibraProgramming.Serialization.Hessian
             );
         }
 
-        private static bool IsSimpleType(Type type) => type.IsValueType || type.IsEnum || type.IsPrimitive;
+        private static bool IsSimpleType(Type type) => type.IsValueType || type.IsEnum || type.IsPrimitive || typeof(string) == type;
 
         private static bool IsTypedArray(Type type) => type.IsArray && type.HasElementType;
 

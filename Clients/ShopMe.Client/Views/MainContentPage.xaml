@@ -30,11 +30,24 @@
             <!--Built in Cells-->
             <ListView.ItemTemplate>
                 <DataTemplate
-                    x:DataType="vm:ShopListDescription">
-                    <TextCell 
-                        Text="{Binding Path=Title, Mode=OneWay}" 
-                        d:Text="{Binding .}" 
-                    />
+                    x:DataType="vm:ShopListDescriptionViewModel">
+                    <ViewCell>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems
+                                    Mode="Reveal">
+                                    <SwipeItem
+                                        Text="Test"
+                                        Command="{Binding Path=Execute, Mode=OneTime}"
+                                    />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Label
+                                Text="{Binding Path=Title, Mode=OneWay}" 
+                                d:Text="{Binding .}" 
+                            />
+                        </SwipeView>
+                    </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
 

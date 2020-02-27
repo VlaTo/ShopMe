@@ -1,7 +1,5 @@
-﻿using LibraProgramming.Serialization.Hessian;
-using RSocket.Core;
-using ShopMe.Models;
-using ShopMe.Models.Commands;
+﻿using ShopMe.Models;
+using ShopMe.Models.Services;
 using System;
 using System.Reactive.Linq;
 using System.Threading;
@@ -11,33 +9,22 @@ namespace ShopMe.Client.Services
 {
     internal sealed class RSocketShopListService : IShopListService
     {
-        private readonly RSocketClient client;
+        private readonly IShopListApi client;
 
-        public RSocketShopListService(RSocketClient client)
+        public RSocketShopListService(IShopListApi client)
         {
             this.client = client;
         }
 
         public IObservable<ShopListDescription> GetLists(CancellationToken cancellationToken = default)
         {
-            var commandSerializer = new DataContractHessianSerializer(typeof(GetShopListsCommand));
-            var command = commandSerializer.Serialize(new GetShopListsCommand
-            {
-
-            });
-
             return Observable.Create<ShopListDescription>(async observer =>
             {
-                var responseSerializer = new DataContractHessianSerializer(typeof(ShopListDescription));
-                var items = client.RequestStreamAsync(
-                    result => (ShopListDescription) responseSerializer.Deserialize(result.data),
-                    command,
-                    cancellationToken: cancellationToken
-                );
+                var response = client.GetAllListsAsync();
 
-                await foreach (var item in items.WithCancellation(cancellationToken))
+                await foreach (var list in response.WithCancellation(cancellationToken))
                 {
-                    observer.OnNext(item);
+                    observer.OnNext(list);
                 }
 
                 observer.OnCompleted();

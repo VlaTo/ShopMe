@@ -11,11 +11,7 @@ namespace ShopMe.Models
         public string Title
         {
             get;
-        }
-
-        public ShopListDescription(string title)
-        {
-            Title = title;
+            set;
         }
     }
 }

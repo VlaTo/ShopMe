@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Buffers;
+using System.Diagnostics;
 using System.Net.WebSockets;
 using System.Runtime.InteropServices;
 using System.Threading;
@@ -18,76 +19,39 @@ namespace RSocket.Core.Extensions
             ILogger logger,
             CancellationToken cancellationToken = default)
         {
-            for (
-                var frame = buffer.Slice(position).PeekFrame(); 
-                frame.Length > 0; 
-                frame = buffer.Slice(position).PeekFrame())
-            {
-                //Console.WriteLine($"Send Frame[{frame.Length}]");
-                var offset = buffer.GetPosition(RSocketProtocol.MESSAGEFRAMESIZE, position);
-                if (buffer.Slice(offset).Length < frame.Length)
-                {
-                    break;
-                }    //If there is a partial message in the buffer, yield to accumulate more. Can't compare SequencePositions...
-
-                var sequence = buffer.Slice(offset, frame.Length);
-                var hasSegment = MemoryMarshal.TryGetArray(sequence.First, out var segment);
-
-                await socket.SendAsync(segment, messageType, frame.IsEndOfMessage, cancellationToken);
-
-                position = buffer.GetPosition(frame.Length, offset);
-            }
-
-
-            /*while (true)
+            while (true)
             {
                 var payload = buffer.Slice(position);
                 var frame = payload.PeekFrame();
 
-                if (0 == frame.Length || payload.Length < frame.Length)
+                if (0 >= frame.Length)
                 {
-                    //If there is a partial message in the buffer, yield to accumulate more. Can't compare SequencePositions...
+                    logger.ZeroFrameLength(socket, payload);
                     break;
                 }
 
-                var offset = buffer.GetPosition(RSocketProtocol.MESSAGEFRAMESIZE, position);
-                //var sequence = buffer.Slice(position, frame.Length);
+                var payloadLength = payload.Length - RSocketProtocol.MESSAGEFRAMESIZE;
+
+                if (payloadLength < frame.Length)
+                {
+                    break;
+                }
+
+                var offset = payload.GetPosition(RSocketProtocol.MESSAGEFRAMESIZE);
                 var sequence = buffer.Slice(offset, frame.Length);
-                
-                await SendAsync(socket, sequence, messageType, logger, cancellationToken);
+                var hasArray = MemoryMarshal.TryGetArray(sequence.First, out var array);
 
-                //position = buffer.GetPosition(frame.Length, position);
-                position = buffer.GetPosition(RSocketProtocol.MESSAGEFRAMESIZE + frame.Length, position);
-            }*/
+                Debug.Assert(hasArray);
 
-            /*for (var frame = buffer.Slice(position).PeekFrame();
-                0 < frame.Length;
-                frame = buffer.Slice(position).PeekFrame())
-            {
-                //var offset = buffer.GetPosition(RSocketProtocol.MESSAGEFRAMESIZE, position);
-                //var payload = buffer.Slice(offset);
-                var payload = buffer.Slice(position);
-                var length = payload.Length - RSocketProtocol.MESSAGEFRAMESIZE;
+                await socket.SendAsync(array, messageType, frame.IsEndOfMessage, cancellationToken);
 
-                if (length < frame.Length)
-                {
-                    //If there is a partial message in the buffer, yield to accumulate more. Can't compare SequencePositions...
-                    break;
-                }
-
-                //var sequence = buffer.Slice(offset, frame.Length);
-                var sequence = buffer.Slice(position, frame.Length);
-
-                await SendAsync(socket, sequence, messageType, cancellationToken);
-
-                //position = buffer.GetPosition(frame.Length, offset);
-                position = buffer.GetPosition(frame.Length, position);
-            }*/
+                position = buffer.GetPosition(frame.Length, offset);
+            }
 
             return position;
         }
 
-        private static async ValueTask SendAsync(
+        /*private static async ValueTask SendAsync(
             WebSocket socket,
             ReadOnlySequence<byte> buffer,
             WebSocketMessageType webSocketMessageType,
@@ -118,7 +82,7 @@ namespace RSocket.Core.Extensions
                 
                 logger.SocketDataSend(memory, 0L == count);
             }
-        }
+        }*/
 
         /*private static (int Length, bool IsEndOfMessage) PeekFrame(ReadOnlySequence<byte> sequence)
         {

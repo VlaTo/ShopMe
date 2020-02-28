@@ -7,13 +7,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.Bcl.AsyncInterfaces" Version="1.1.0" />
-    <PackageReference Include="Xamarin.Essentials" Version="1.3.1" />
-    <PackageReference Include="Xamarin.Forms" Version="4.4.0.991640" />
+    <PackageReference Include="sqlite-net-pcl" Version="1.6.292" />
+    <PackageReference Include="Xamarin.Essentials" Version="1.5.0" />
+    <PackageReference Include="Xamarin.Forms" Version="4.5.0.356" />
     <PackageReference Include="Prism.Unity.Forms" Version="7.2.0.1422" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Shared\LibraProgramming.Serialization.Hessian\LibraProgramming.Serialization.Hessian.csproj" />
     <ProjectReference Include="..\..\Shared\RSocket.Core\RSocket.Core.csproj" />
+    <ProjectReference Include="..\..\Shared\ShopMe.Application\ShopMe.Application.csproj" />
     <ProjectReference Include="..\..\Shared\ShopMe.Models\ShopMe.Models.csproj" />
   </ItemGroup>
 

@@ -7,17 +7,16 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:ShopMe.Client.ViewModels;assembly=ShopMe.Client"
     xmlns:prism="http://prismlibrary.com"
-    mc:Ignorable="d"
-    prism:ViewModelLocator.AutowireViewModel="True"
-    Appearing="OnPageAppearing">
+    mc:Ignorable="d">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding Path=BackCommand, Mode=OneTime}" />
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
         <ListView
             ItemsSource="{Binding Path=Items, Mode=OneWay}"
-            ItemTapped="Handle_ItemTapped"
-            CachingStrategy="RecycleElement">
+            IsGroupingEnabled="False"
+            CachingStrategy="RecycleElement"
+            SelectionMode="None">
             <d:ListView.ItemsSource>
                 <x:Array Type="{x:Type x:String}">
                     <x:String>Item 1</x:String>
@@ -30,11 +29,43 @@
             <!--Built in Cells-->
             <ListView.ItemTemplate>
                 <DataTemplate
-                    x:DataType="vm:ShopListDescription">
-                    <TextCell 
-                        Text="{Binding Path=Title, Mode=OneWay}" 
-                        d:Text="{Binding .}" 
-                    />
+                    x:DataType="vm:ShopListDescriptionViewModel">
+                    <ViewCell>
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems
+                                    Mode="Reveal">
+                                    <SwipeItem
+                                        Text="Test"
+                                        Command="{Binding Path=Execute, Mode=OneTime}"
+                                    />
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto" />
+                                    <ColumnDefinition Width="*" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                </Grid.RowDefinitions>
+                                <Image
+                                    Grid.Column="0"
+                                    Grid.Row="0"
+                                    Grid.RowSpan="2"
+                                />
+                                <Label
+                                    Grid.Row="0"
+                                    Grid.Column="1"
+                                    FontAttributes="None"
+                                    FontSize="Title"
+                                    Text="{Binding Path=Title, Mode=OneWay}" 
+                                    d:Text="{Binding .}" 
+                                />
+                            </Grid>
+                        </SwipeView>
+                    </ViewCell>
                 </DataTemplate>
             </ListView.ItemTemplate>
 

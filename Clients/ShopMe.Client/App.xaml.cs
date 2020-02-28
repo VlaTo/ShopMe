@@ -1,13 +1,19 @@
-﻿using System.Threading;
+﻿using System;
+using System.Diagnostics;
+using System.Threading;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using Prism;
+using Prism.Events;
 using Prism.Ioc;
 using RSocket.Core;
 using RSocket.Core.Transports;
+using ShopMe.Application;
+using ShopMe.Application.Services;
 using ShopMe.Client.Services;
 using ShopMe.Client.ViewModels;
 using ShopMe.Client.Views;
+using ShopMe.Models.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -39,7 +45,7 @@ namespace ShopMe.Client
 
             await client.ConnectAsync(CancellationToken.None);
 
-            MainPage = new AppShell();
+            MainPage = Container.Resolve<AppShell>(); // new AppShell();
 
             /*var result = await NavigationService.NavigateAsync("NavigationPage/MainPage");
 
@@ -52,15 +58,27 @@ namespace ShopMe.Client
         protected override void RegisterTypes(IContainerRegistry containerRegistry)
         {
             //Services
-            containerRegistry.RegisterInstance(ConnectClient());
+            containerRegistry.RegisterInstance(CreateClient());
             containerRegistry.RegisterSingleton<IShopListService, RSocketShopListService>();
+            containerRegistry.RegisterSingleton<IShopListProvider, RemoteShopListProvider>("local");
+            containerRegistry.RegisterInstance(ShopListProvider.Empty, "remote");
+            containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
+            containerRegistry.RegisterInstance(CreateShopMeEngineInstance());
 
             //Registering Views+ViewModels
-            containerRegistry.RegisterForNavigation<MainContentPage, MainContentPageViewModel>();
+            containerRegistry.RegisterForNavigation<AppShell, AppShellViewModel>();
+            //containerRegistry.RegisterForNavigation<MainContentPage, MainContentPageViewModel>();
             containerRegistry.RegisterForNavigation<AboutPage, AboutPageViewModel>();
         }
 
-        private static RSocketClient ConnectClient()
+        private IShopMeEngine CreateShopMeEngineInstance()
+        {
+            var localProvider = Container.Resolve<IShopListProvider>("local");
+            var remoteProvider = Container.Resolve<IShopListProvider>("remote");
+            return new ShopMeEngine(localProvider, remoteProvider);
+        }
+
+        private static RSocketClient CreateClient()
         {
             var factory = new NullLoggerFactory();
             var transport = new ClientWebSocketTransport("ws://localhost:5000/api", factory.CreateLogger<WebSocketTransport>());

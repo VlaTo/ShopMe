@@ -1,5 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Shell
+    x:Class="ShopMe.Client.AppShell"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -8,7 +9,7 @@
     xmlns:c="clr-namespace:ShopMe.Client.Controls;assembly=ShopMe.Client"
     xmlns:prism="http://prismlibrary.com"
     mc:Ignorable="d"
-    x:Class="ShopMe.Client.AppShell">
+    prism:ViewModelLocator.AutowireViewModel="True">
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Buffers;
 using System.Diagnostics;
 using System.Net.WebSockets;
 using Microsoft.Extensions.Logging;
@@ -53,6 +54,12 @@ namespace RSocket.Core.Extensions
         public static void FrameSent(this ILogger logger, WebSocketReceiveResult result)
         {
             logger.LogDebug($"Frame received (count = {result.Count}, last = {result.EndOfMessage})");
+        }
+
+        [Conditional("DEBUG")]
+        public static void ZeroFrameLength(this ILogger logger, WebSocket socket, ReadOnlySequence<byte> sequence)
+        {
+            logger.LogDebug($"Frame length = 0, socket state = {socket.State})");
         }
     }
 }

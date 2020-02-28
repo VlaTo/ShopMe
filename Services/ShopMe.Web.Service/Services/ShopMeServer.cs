@@ -1,13 +1,14 @@
-﻿using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using LibraProgramming.Serialization.Hessian;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using RSocket.Core;
+using ShopMe.Models;
+using System.Buffers;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ShopMe.Web.Service.Services
 {
@@ -25,43 +26,37 @@ namespace ShopMe.Web.Service.Services
             this.mediator = mediator;
 
             Stream(
-                request => request.Data,
-                request =>
-                {
-                    var command = Encoding.UTF8.GetString(request.ToArray());
-                    return HandleCommand(command);
-                },
-                result =>
-                {
-                    var bytes = Encoding.UTF8.GetBytes(result);
-                    return (new ReadOnlySequence<byte>(bytes), ReadOnlySequence<byte>.Empty);
-                }
+                request => request,
+                request => AsyncEnumerable.Create(ShopLists),
+                result => (result, ReadOnlySequence<byte>.Empty)
             );
         }
 
-        private IAsyncEnumerable<string> HandleCommand(string command)
-        {
-            switch (command)
-            {
-                case "shoplists":
-                {
-                    return AsyncEnumerable.Create<string>(ShopLists);
-                }
-
-                default:
-                {
-                    return AsyncEnumerable.Empty<string>();
-                }
-            }
-        }
-
-        private async IAsyncEnumerator<string> ShopLists(CancellationToken cancellationToken)
+        private static async IAsyncEnumerator<ReadOnlySequence<byte>> ShopLists(CancellationToken cancellationToken)
         {
             await Task.CompletedTask;
 
-            yield return "Lorem ipsum dolor sit amet";
-            yield return "Consectetur adipiscing elit";
-            yield return "Sed do eiusmod tempor incididunt";
+            var serializer = new DataContractHessianSerializer(typeof(ShopListInfo));
+            var lists = new[]
+            {
+                "Lorem ipsum dolor sit amet",
+                "Consectetur adipiscing elit",
+                "Sed do eiusmod tempor incididunt"
+            };
+
+            foreach (var list in lists)
+            {
+                var description = new ShopListInfo
+                {
+                    Title = list
+                };
+
+                using (var stream = new MemoryStream())
+                {
+                    serializer.WriteObject(stream, description);
+                    yield return new ReadOnlySequence<byte>(stream.ToArray());
+                }
+            }
         }
     }
 }

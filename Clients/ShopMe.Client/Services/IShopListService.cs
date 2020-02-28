@@ -6,6 +6,6 @@ namespace ShopMe.Client.Services
 {
     public interface IShopListService
     {
-        IObservable<ShopListDescription> GetLists(CancellationToken cancellationToken = default);
+        IObservable<ShopListInfo> GetLists(CancellationToken cancellationToken = default);
     }
 }

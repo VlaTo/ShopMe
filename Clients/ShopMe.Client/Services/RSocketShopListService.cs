@@ -16,9 +16,9 @@ namespace ShopMe.Client.Services
             this.client = client;
         }
 
-        public IObservable<ShopListDescription> GetLists(CancellationToken cancellationToken = default)
+        public IObservable<ShopListInfo> GetLists(CancellationToken cancellationToken = default)
         {
-            return Observable.Create<ShopListDescription>(async observer =>
+            return Observable.Create<ShopListInfo>(async observer =>
             {
                 var response = client.GetAllListsAsync();
 

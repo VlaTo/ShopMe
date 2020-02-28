@@ -1,9 +1,4 @@
-﻿using System;
-using Prism.Navigation;
-using ShopMe.Client.Services;
-using ShopMe.Client.ViewModels;
-using Xamarin.Essentials;
-using Xamarin.Forms;
+﻿using Xamarin.Essentials;
 using Xamarin.Forms.Xaml;
 
 namespace ShopMe.Client.Views
@@ -15,10 +10,10 @@ namespace ShopMe.Client.Views
         {
             InitializeComponent();
 
-            var value = Preferences.Get("test-key", "test");
+            var value = Preferences.Get("test-key", "no-test-key");
         }
         
-        private async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
+        /*private async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
         {
             if (e.Item == null)
                 return;
@@ -27,14 +22,14 @@ namespace ShopMe.Client.Views
 
             //Deselect Item
             ((ListView)sender).SelectedItem = null;
-        }
+        }*/
 
-        private void OnPageAppearing(object sender, EventArgs e)
+        /*private void OnPageAppearing(object sender, EventArgs e)
         {
             if (BindingContext is IAppearing appearing)
             {
                 appearing.Appearing();
             }
-        }
+        }*/
     }
 }

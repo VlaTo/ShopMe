@@ -4,6 +4,6 @@ namespace ShopMe.Models.Services
 {
     public interface IShopListApi
     {
-        IAsyncEnumerable<ShopListDescription> GetAllListsAsync();
+        IAsyncEnumerable<ShopListInfo> GetAllListsAsync();
     }
 }

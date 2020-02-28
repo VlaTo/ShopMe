@@ -36,7 +36,7 @@ namespace ShopMe.Web.Service.Services
         {
             await Task.CompletedTask;
 
-            var serializer = new DataContractHessianSerializer(typeof(ShopListDescription));
+            var serializer = new DataContractHessianSerializer(typeof(ShopListInfo));
             var lists = new[]
             {
                 "Lorem ipsum dolor sit amet",
@@ -46,7 +46,7 @@ namespace ShopMe.Web.Service.Services
 
             foreach (var list in lists)
             {
-                var description = new ShopListDescription
+                var description = new ShopListInfo
                 {
                     Title = list
                 };

@@ -17,7 +17,7 @@ namespace ShopMe.Console
             this.client = client;
         }
 
-        public IAsyncEnumerable<ShopListDescription> GetAllListsAsync()
+        public IAsyncEnumerable<ShopListInfo> GetAllListsAsync()
         {
             var methodInfo = typeof(IShopListApi).GetMethod(nameof(IShopListApi.GetAllListsAsync));
             var hessianCall = new HessianCall(methodInfo);
@@ -27,12 +27,12 @@ namespace ShopMe.Console
                 hessianCall.WriteCall(stream);
                 bytes = new ReadOnlySequence<byte>(stream.ToArray());
             }
-            var serializer = new DataContractHessianSerializer(typeof(ShopListDescription));
+            var serializer = new DataContractHessianSerializer(typeof(ShopListInfo));
             var enumerable = client.RequestStreamAsync(
                 result =>
                 {
                     using var stream = new MemoryStream(result.data.ToArray());
-                    return (ShopListDescription) serializer.ReadObject(stream);
+                    return (ShopListInfo) serializer.ReadObject(stream);
                 },
                 bytes
             );

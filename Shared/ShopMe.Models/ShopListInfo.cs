@@ -5,7 +5,7 @@ namespace ShopMe.Models
 {
     [Serializable]
     [DataContract(Name = "list")]
-    public class ShopListDescription
+    public class ShopListInfo
     {
         [DataMember(Name = "title")]
         public string Title

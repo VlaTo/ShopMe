@@ -7,6 +7,7 @@ using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
 using Prism.Commands;
+using Prism.Events;
 using Xamarin.Essentials;
 
 namespace ShopMe.Client.ViewModels
@@ -15,6 +16,7 @@ namespace ShopMe.Client.ViewModels
     {
         private readonly IShopListService service;
         private readonly INavigationService navigationService;
+        private readonly IEventAggregator eventAggregator;
         private readonly CancellationTokenSource cts;
 
         public DelegateCommand BackCommand
@@ -27,10 +29,11 @@ namespace ShopMe.Client.ViewModels
             get; 
         }
 
-        public MainContentPageViewModel(IShopListService service, INavigationService navigationService)
+        public MainContentPageViewModel(IShopListService service, INavigationService navigationService, IEventAggregator eventAggregator)
         {
             this.service = service;
             this.navigationService = navigationService;
+            this.eventAggregator = eventAggregator;
             cts = new CancellationTokenSource();
 
             Items = new ObservableCollection<ShopListDescriptionViewModel>();
@@ -61,7 +64,7 @@ namespace ShopMe.Client.ViewModels
 
             service.GetLists(cts.Token).Subscribe(async list =>
             {
-                var model = new ShopListDescriptionViewModel
+                var model = new ShopListDescriptionViewModel(navigationService)
                 {
                     Title = list.Title
                 };

@@ -15,7 +15,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Services", "Services", "{5B
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Shared", "Shared", "{3FEB5DE2-7115-424C-88B3-6F5F7814DA02}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopMe.Models", "Shared\ShopMe.Models\ShopMe.Models.csproj", "{7722B444-6BC9-4F3B-ACFC-921B662CA82D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ShopMe.Transport", "Shared\ShopMe.Transport\ShopMe.Transport.csproj", "{7722B444-6BC9-4F3B-ACFC-921B662CA82D}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "RSocket.Core", "Shared\RSocket.Core\RSocket.Core.csproj", "{EDA997AA-220E-4D6C-9BEB-58148E543DA2}"
 EndProject

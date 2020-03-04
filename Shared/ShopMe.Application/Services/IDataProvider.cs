@@ -4,8 +4,8 @@ using ShopMe.Application.Models;
 
 namespace ShopMe.Application.Services
 {
-    public interface IShopListProvider
+    public interface IDataProvider
     {
-        IAsyncEnumerable<ShopList> GetChanges(CancellationToken cancellationToken);
+        IAsyncEnumerable<ShopList> GetShopLists(CancellationToken cancellationToken);
     }
 }

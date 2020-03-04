@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading;
-using ShopMe.Models;
+using System.Threading.Tasks;
+using ShopMe.Application.Models;
 
 namespace ShopMe.Client.Services
 {
     public interface IShopListService
-    {
-        IObservable<ShopListInfo> GetLists(CancellationToken cancellationToken = default);
+    { 
+        Task<IObservable<ShopList>> GetListsAsync(CancellationToken cancellationToken = default);
     }
 }

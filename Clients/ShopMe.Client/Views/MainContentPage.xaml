@@ -18,18 +18,18 @@
             CachingStrategy="RecycleElement"
             SelectionMode="None">
             <d:ListView.ItemsSource>
-                <x:Array Type="{x:Type x:String}">
-                    <x:String>Item 1</x:String>
-                    <x:String>Item 2</x:String>
-                    <x:String>Item 3</x:String>
-                    <x:String>Item 4</x:String>
-                    <x:String>Item 5</x:String>
+                <x:Array Type="{x:Type vm:ShopListViewModel}">
+                    <vm:ShopListViewModel Title="Item 1" />
+                    <vm:ShopListViewModel Title="Item 2" />
+                    <vm:ShopListViewModel Title="Item 3" />
+                    <vm:ShopListViewModel Title="Item 4" />
+                    <vm:ShopListViewModel Title="Item 5" />
                 </x:Array>
             </d:ListView.ItemsSource>
             <!--Built in Cells-->
             <ListView.ItemTemplate>
                 <DataTemplate
-                    x:DataType="vm:ShopListDescriptionViewModel">
+                    x:DataType="vm:ShopListViewModel">
                     <ViewCell>
                         <SwipeView>
                             <SwipeView.RightItems>
@@ -61,7 +61,7 @@
                                     FontAttributes="None"
                                     FontSize="Title"
                                     Text="{Binding Path=Title, Mode=OneWay}" 
-                                    d:Text="{Binding .}" 
+                                    d:Text="{Binding Path=Title}" 
                                 />
                             </Grid>
                         </SwipeView>

@@ -1,4 +1,6 @@
-﻿using System.Threading;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using ShopMe.Application.Models;
 using ShopMe.Application.Observable.Collections;
@@ -8,26 +10,26 @@ namespace ShopMe.Application
 {
     public sealed class ShopMeEngine : IShopMeEngine
     {
-        private readonly IShopListProvider local;
-        private readonly IShopListProvider remote;
+        private readonly IDataProvider dataProvider;
+        private readonly IChangesProvider changesProvider;
 
-        public ShopMeEngine(IShopListProvider local, IShopListProvider remote)
+        public ShopMeEngine(IDataProvider dataProvider, IChangesProvider changesProvider)
         {
-            this.local = local;
-            this.remote = remote;
+            this.dataProvider = dataProvider;
+            this.changesProvider = changesProvider;
         }
 
-        public async Task<IObservableCollection<ShopList>> GetActualLists()
+        public async Task<IObservableCollection<ShopList>> GetActualListsAsync(CancellationToken cancellationToken)
         {
             var cancellationTokenSource = new CancellationTokenSource();
-            var collection = new ObservableCollection<ShopList>();
+            var result = new Observable.Collections.ObservableCollection<ShopList>();
 
-            await foreach (var change in local.GetChanges(cancellationTokenSource.Token))
+            await foreach (var list in dataProvider.GetShopLists(cancellationTokenSource.Token))
             {
-                collection.Add(change);
+                result.Add(list);
             }
 
-            return collection;
+            return result;
         }
     }
 }

@@ -1,30 +1,28 @@
-﻿using System.Diagnostics;
-using System.Windows.Input;
-using Prism.Commands;
-using Prism.Mvvm;
+﻿using Prism.Mvvm;
 using Prism.Navigation;
-using Prism.Navigation.Xaml;
+using System.Diagnostics;
+using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace ShopMe.Client.ViewModels
 {
-    public class ShopListDescriptionViewModel : BindableBase
+    public class ShopListViewModel : BindableBase
     {
+        public readonly INavigationService navigation;
         private string title;
-        private string description;
         private double progress;
         private bool completed;
+
+        public long Id
+        {
+            get;
+        }
+
 
         public string Title
         {
             get => title;
             set => SetProperty(ref title, value);
-        }
-
-        public string Description
-        {
-            get => description;
-            set => SetProperty(ref description, value);
         }
 
         public double Progress
@@ -44,10 +42,16 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
-        public ShopListDescriptionViewModel(INavigationService navigationService)
+        public ShopListViewModel()
         {
             Execute = new Command(DoExecuteCommand);
-            //Execute = new DelegateCommand(DoExecuteCommand);
+        }
+
+        public ShopListViewModel(long id, INavigationService navigation)
+            : this()
+        {
+            Id = id;
+            this.navigation = navigation;
         }
 
         private void DoExecuteCommand()

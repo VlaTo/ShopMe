@@ -2,7 +2,7 @@
 using System.Reactive.Disposables;
 using ShopMe.Application.Observable.Collections;
 
-namespace ShopMe.Application.Observable
+namespace ShopMe.Application.Observable.Extensions
 {
     public static class ObservableCollectionExtensions
     {

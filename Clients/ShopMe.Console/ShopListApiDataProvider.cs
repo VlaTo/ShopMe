@@ -1,25 +1,26 @@
-﻿using System.Buffers;
+﻿using RSocket.Core;
+using ShopMe.Application.Models;
+using ShopMe.Application.Services;
 using System.Collections.Generic;
-using System.IO;
-using LibraProgramming.Serialization.Hessian;
-using RSocket.Core;
-using ShopMe.Models;
-using ShopMe.Models.Services;
+using System.Linq;
+using System.Threading;
 
 namespace ShopMe.Console
 {
-    internal sealed class ShopListApiClient : ClientApiBase, IShopListApi
+    internal sealed class ShopListApiDataProvider : ClientApiBase, IDataProvider
     {
         private readonly RSocketClient client;
 
-        public ShopListApiClient(RSocketClient client)
+        public ShopListApiDataProvider(RSocketClient client)
         {
             this.client = client;
         }
 
-        public IAsyncEnumerable<ShopListInfo> GetAllListsAsync()
+        public IAsyncEnumerable<ShopList> GetShopLists(CancellationToken cancellationToken)
         {
-            var methodInfo = typeof(IShopListApi).GetMethod(nameof(IShopListApi.GetAllListsAsync));
+            return AsyncEnumerable.Empty<ShopList>();
+
+            /*var methodInfo = typeof(IShopListApi).GetMethod(nameof(IShopListApi.GetAllListsAsync));
             var hessianCall = new HessianCall(methodInfo);
             var bytes = ReadOnlySequence<byte>.Empty;
             using (var stream = new MemoryStream())
@@ -36,7 +37,7 @@ namespace ShopMe.Console
                 },
                 bytes
             );
-            return enumerable;
+            return enumerable;*/
         }
     }
 }

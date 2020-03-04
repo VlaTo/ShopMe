@@ -1,18 +1,11 @@
-﻿using System;
-using System.Buffers;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Reactive.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using LibraProgramming.Serialization.Hessian;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using RSocket.Core;
 using RSocket.Core.Transports;
-using ShopMe.Models;
-using ShopMe.Models.Commands;
-using ShopMe.Models.Services;
+using ShopMe.Application;
+using ShopMe.Application.Observable.Extensions;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace ShopMe.Console
 {
@@ -23,26 +16,30 @@ namespace ShopMe.Console
             var loggerFactory = new NullLoggerFactory();
             var transport = new ClientWebSocketTransport("ws://localhost:5000/api", loggerFactory.CreateLogger<WebSocketTransport>());
             var client = new RSocketClient(transport);
-            var service = new ShopListApiClient(client);
+            var dataProvider = new ShopListApiDataProvider(client);
             //var invoker = new DefaultCallInvoker(null);
+            var engine = new ShopMeEngine(dataProvider, null);
             
-            RetrieveListAsync(service, client).Wait();
+            RetrieveListAsync(client, engine).Wait();
 
             System.Console.WriteLine("Press key to close");
             System.Console.ReadLine();
         }
 
-        private static async Task RetrieveListAsync(IShopListApi api, RSocketClient client)
+        private static async Task RetrieveListAsync(RSocketClient client, IShopMeEngine engine)
         {
             await client.ConnectAsync(default);
 
             //System.Console.WriteLine("Press key");
             //System.Console.ReadLine();
 
-            await foreach (var description in api.GetAllListsAsync())
-            {
-                System.Console.WriteLine($"List title: {description.Title}");
-            }
+            var result = await engine.GetActualListsAsync(CancellationToken.None);
+
+            result.Subscribe(
+                added => { System.Console.WriteLine($"List title: {added.Title}"); },
+                removed => { System.Console.WriteLine($"List title: {removed.Id}"); },
+                changed => { System.Console.WriteLine($"List title: {changed.Title}"); }
+            );
 
             System.Console.WriteLine("Done");
 

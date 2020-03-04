@@ -13,7 +13,6 @@ using ShopMe.Application.Services;
 using ShopMe.Client.Services;
 using ShopMe.Client.ViewModels;
 using ShopMe.Client.Views;
-using ShopMe.Models.Services;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -59,23 +58,16 @@ namespace ShopMe.Client
         {
             //Services
             containerRegistry.RegisterInstance(CreateClient());
-            containerRegistry.RegisterSingleton<IShopListService, RSocketShopListService>();
-            containerRegistry.RegisterSingleton<IShopListProvider, RemoteShopListProvider>("local");
-            containerRegistry.RegisterInstance(ShopListProvider.Empty, "remote");
+            //containerRegistry.RegisterSingleton<IShopListService, RSocketShopListService>();
+            containerRegistry.RegisterSingleton<IDataProvider, DataProvider>();
+            containerRegistry.RegisterSingleton<IChangesProvider, RemoteChangesProvider>();
             containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();
-            containerRegistry.RegisterInstance(CreateShopMeEngineInstance());
+            containerRegistry.RegisterSingleton<IShopMeEngine, ShopMeEngine>();
 
             //Registering Views+ViewModels
             containerRegistry.RegisterForNavigation<AppShell, AppShellViewModel>();
             //containerRegistry.RegisterForNavigation<MainContentPage, MainContentPageViewModel>();
             containerRegistry.RegisterForNavigation<AboutPage, AboutPageViewModel>();
-        }
-
-        private IShopMeEngine CreateShopMeEngineInstance()
-        {
-            var localProvider = Container.Resolve<IShopListProvider>("local");
-            var remoteProvider = Container.Resolve<IShopListProvider>("remote");
-            return new ShopMeEngine(localProvider, remoteProvider);
         }
 
         private static RSocketClient CreateClient()

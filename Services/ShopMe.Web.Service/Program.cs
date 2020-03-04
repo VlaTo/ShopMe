@@ -1,9 +1,4 @@
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection;
-using System.Threading.Tasks;
-using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -43,12 +38,6 @@ namespace ShopMe.Web.Service
                 })
                 .ConfigureServices((context, services) =>
                 {
-                    services
-                        .AddMediatR(new[]
-                        {
-                            Assembly.GetEntryAssembly()
-                        });
-
                     services
                         .AddLogging(logging =>
                         {

@@ -1,30 +1,24 @@
 ﻿using LibraProgramming.Serialization.Hessian;
-using MediatR;
 using Microsoft.Extensions.Logging;
 using RSocket.Core;
-using ShopMe.Models;
 using System.Buffers;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using ShopMe.Transport.Models;
 
 namespace ShopMe.Web.Service.Services
 {
     internal sealed class ShopMeServer : RSocketServer
     {
-        private readonly IMediator mediator;
-
         public ShopMeServer(
-            IMediator mediator,
             IRSocketTransport transport,
             RSocketOptions options,
             ILogger<ShopMeServer> logger)
             : base(transport, options, logger)
         {
-            this.mediator = mediator;
-
             Stream(
                 request => request,
                 request => AsyncEnumerable.Create(ShopLists),
@@ -36,7 +30,7 @@ namespace ShopMe.Web.Service.Services
         {
             await Task.CompletedTask;
 
-            var serializer = new DataContractHessianSerializer(typeof(ShopListInfo));
+            var serializer = new DataContractHessianSerializer(typeof(AggregatedChanges));
             var lists = new[]
             {
                 "Lorem ipsum dolor sit amet",

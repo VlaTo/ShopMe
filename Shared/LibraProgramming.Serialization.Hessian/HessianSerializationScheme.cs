@@ -68,7 +68,7 @@ namespace LibraProgramming.Serialization.Hessian
                 return new ValueElement(type, serializer);
             }
 
-            if (IsTypedArray(type))
+            if (IsArray(type))
             {
                 return BuildArraySerializationElement(type, catalog, factory);
             }
@@ -142,17 +142,27 @@ namespace LibraProgramming.Serialization.Hessian
                 throw new HessianSerializerException();
             }
 
-            var elementType = type.GetElementType();
-
-            if (typeof(object) == elementType)
+            if (type.HasElementType)
             {
-                // untyped
+                var elementType = type.GetElementType();
+
+                if (typeof(object) != elementType)
+                {
+                    return new FixedLengthTypedListElement(
+                        elementType.MakeArrayType(1),
+                        CreateSerializationElement(elementType, catalog, factory)
+                    );
+                }
             }
 
-            return new FixedLengthTypedListElement(
+            //var itemType = type.GetElementType();
+
+            /*return new FixedLengthGenericArrayElement(
                 elementType.MakeArrayType(1),
                 CreateSerializationElement(elementType, catalog, factory)
-            );
+            );*/
+
+            throw new NotSupportedException();
         }
 
         private static ISerializationElement BuildListSerializationElement(Type type, IDictionary<Type, ISerializationElement> catalog, IObjectSerializerFactory factory)
@@ -185,6 +195,8 @@ namespace LibraProgramming.Serialization.Hessian
         private static bool IsSimpleType(Type type) => type.IsValueType || type.IsEnum || type.IsPrimitive || typeof(string) == type;
 
         private static bool IsTypedArray(Type type) => type.IsArray && type.HasElementType;
+
+        private static bool IsArray(Type type) => type.IsArray;
 
         private static bool IsTypedList(Type type)
         {

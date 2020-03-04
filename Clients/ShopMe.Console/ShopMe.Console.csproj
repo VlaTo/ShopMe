@@ -9,7 +9,8 @@
   <ItemGroup>
     <ProjectReference Include="..\..\Shared\LibraProgramming.Serialization.Hessian\LibraProgramming.Serialization.Hessian.csproj" />
     <ProjectReference Include="..\..\Shared\RSocket.Core\RSocket.Core.csproj" />
-    <ProjectReference Include="..\..\Shared\ShopMe.Models\ShopMe.Models.csproj" />
+    <ProjectReference Include="..\..\Shared\ShopMe.Application\ShopMe.Application.csproj" />
+    <ProjectReference Include="..\..\Shared\ShopMe.Transport\ShopMe.Transport.csproj" />
   </ItemGroup>
 
 </Project>

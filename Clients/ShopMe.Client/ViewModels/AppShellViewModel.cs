@@ -3,6 +3,8 @@ using Prism.Mvvm;
 using ShopMe.Application;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using Prism.AppModel;
@@ -10,6 +12,7 @@ using Prism.Navigation;
 using Xamarin.Essentials;
 using Xamarin.Forms;
 using ShopMe.Application.Observable;
+using ShopMe.Application.Observable.Extensions;
 
 namespace ShopMe.Client.ViewModels
 {
@@ -19,12 +22,12 @@ namespace ShopMe.Client.ViewModels
         private readonly INavigationService navigation;
         private IDisposable disposable;
 
-        public ObservableCollection<ShopListDescriptionViewModel> Items
+        public ObservableCollection<ShopListViewModel> Items
         {
             get;
         }
 
-        public ObservableCollection<ShopListDescriptionViewModel> LatestItems
+        public ObservableCollection<ShopListViewModel> LatestItems
         {
             get;
         }
@@ -39,37 +42,45 @@ namespace ShopMe.Client.ViewModels
             this.engine = engine;
             this.navigation = navigation;
 
-            Items = new ObservableCollection<ShopListDescriptionViewModel>();
-            LatestItems = new ObservableCollection<ShopListDescriptionViewModel>();
+            Items = new ObservableCollection<ShopListViewModel>();
+            LatestItems = new ObservableCollection<ShopListViewModel>();
             BackCommand = new Command(async () => await navigation.GoBackAsync());
         }
 
         public async Task InitializeAsync(INavigationParameters parameters)
         {
-            Debugger.Break();
-
             Items.Clear();
 
-            var lists = await engine.GetActualLists();
+            var lists = await engine.GetActualListsAsync(CancellationToken.None);
 
-            disposable = lists.Subscribe(async item =>
+            disposable = lists.Subscribe(
+                async list =>
                 {
-                    var model = new ShopListDescriptionViewModel(navigation)
+                    var model = new ShopListViewModel(list.Id, navigation)
                     {
-                        Title = item.Title
+                        Title = list.Title
                     };
 
                     await MainThread.InvokeOnMainThreadAsync(() => Items.Add(model));
 
                 },
-                async item =>
+                async list =>
                 {
-                    var model = new ShopListDescriptionViewModel(navigation)
-                    {
-                        Title = item.Title
-                    };
+                    var model = Items.FirstOrDefault(item => item.Id == list.Id);
 
-                    await MainThread.InvokeOnMainThreadAsync(() => Items.Remove(model));
+                    if (null != model)
+                    {
+                        await MainThread.InvokeOnMainThreadAsync(() => Items.Remove(model));
+                    }
+                },
+                async list =>
+                {
+                    var model = Items.FirstOrDefault(item => item.Id == list.Id);
+
+                    if (null != model)
+                    {
+                        await MainThread.InvokeOnMainThreadAsync(() => { model.Title = list.Title; });
+                    }
                 }
             );
         }

@@ -13,17 +13,17 @@ namespace ShopMe.Client.Services
         {
         }
 
-        public IAsyncEnumerable<ShopList> GetShopLists(CancellationToken cancellationToken)
+        public IAsyncEnumerable<ShopListDescription> GetShopLists(CancellationToken cancellationToken)
         {
             return AsyncEnumerable.Create(cancel =>
             {
-                static async IAsyncEnumerator<ShopList> Test()
+                static async IAsyncEnumerator<ShopListDescription> Test()
                 {
                     await Task.CompletedTask;
 
-                    yield return new ShopList(1, "Lorem Ipsum");
-                    yield return new ShopList(2, "Hsjhfc sjkdkjshfch sdfc");
-                    yield return new ShopList(3, "Udfjhcsj hgefhsd sdfcjsdjf");
+                    yield return new ShopListDescription(1, "Lorem Ipsum");
+                    yield return new ShopListDescription(2, "Hsjhfc sjkdkjshfch sdfc");
+                    yield return new ShopListDescription(3, "Udfjhcsj hgefhsd sdfcjsdjf");
                 }
 
                 return Test();

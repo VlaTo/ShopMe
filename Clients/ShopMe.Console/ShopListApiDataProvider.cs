@@ -16,9 +16,9 @@ namespace ShopMe.Console
             this.client = client;
         }
 
-        public IAsyncEnumerable<ShopList> GetShopLists(CancellationToken cancellationToken)
+        public IAsyncEnumerable<ShopListDescription> GetShopLists(CancellationToken cancellationToken)
         {
-            return AsyncEnumerable.Empty<ShopList>();
+            return AsyncEnumerable.Empty<ShopListDescription>();
 
             /*var methodInfo = typeof(IShopListApi).GetMethod(nameof(IShopListApi.GetAllListsAsync));
             var hessianCall = new HessianCall(methodInfo);

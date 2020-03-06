@@ -1,12 +1,11 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using ShopMe.Application.Models;
-using ShopMe.Application.Observable.Collections;
+﻿using ShopMe.Application.Models;
+using System;
+using System.Threading;
 
 namespace ShopMe.Application
 {
     public interface IShopMeEngine
     {
-        Task<IObservableCollection<ShopList>> GetActualListsAsync(CancellationToken cancellationToken);
+        IObservable<ShopListDescriptionChanges> GetActualLists(CancellationToken cancellationToken);
     }
 }

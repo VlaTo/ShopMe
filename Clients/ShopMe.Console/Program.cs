@@ -33,13 +33,13 @@ namespace ShopMe.Console
             //System.Console.WriteLine("Press key");
             //System.Console.ReadLine();
 
-            var result = await engine.GetActualListsAsync(CancellationToken.None);
+            var result = engine.GetActualLists(CancellationToken.None);
 
-            result.Subscribe(
+            /*result.Subscribe(
                 added => { System.Console.WriteLine($"List title: {added.Title}"); },
                 removed => { System.Console.WriteLine($"List title: {removed.Id}"); },
                 changed => { System.Console.WriteLine($"List title: {changed.Title}"); }
-            );
+            );*/
 
             System.Console.WriteLine("Done");
 

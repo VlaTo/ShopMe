@@ -6,7 +6,7 @@ using Xamarin.Forms;
 
 namespace ShopMe.Client.ViewModels
 {
-    public class ShopListViewModel : BindableBase
+    public class ListDescriptionViewModel : BindableBase
     {
         public readonly INavigationService navigation;
         private string title;
@@ -42,12 +42,12 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
-        public ShopListViewModel()
+        public ListDescriptionViewModel()
         {
             Execute = new Command(DoExecuteCommand);
         }
 
-        public ShopListViewModel(long id, INavigationService navigation)
+        public ListDescriptionViewModel(long id, INavigationService navigation)
             : this()
         {
             Id = id;

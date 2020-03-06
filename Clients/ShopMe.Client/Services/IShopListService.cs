@@ -7,6 +7,6 @@ namespace ShopMe.Client.Services
 {
     public interface IShopListService
     { 
-        Task<IObservable<ShopList>> GetListsAsync(CancellationToken cancellationToken = default);
+        Task<IObservable<ShopListDescription>> GetListsAsync(CancellationToken cancellationToken = default);
     }
 }

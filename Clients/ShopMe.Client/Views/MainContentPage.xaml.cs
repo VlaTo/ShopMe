@@ -1,4 +1,6 @@
-﻿using Xamarin.Essentials;
+﻿using System.Diagnostics;
+using Xamarin.Essentials;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ShopMe.Client.Views
@@ -31,5 +33,9 @@ namespace ShopMe.Client.Views
                 appearing.Appearing();
             }
         }*/
+        private void ListsView_OnItemTapped(object sender, ItemTappedEventArgs e)
+        {
+            Debug.WriteLine("ListsView_OnItemTapped");
+        }
     }
 }

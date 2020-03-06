@@ -1,23 +1,18 @@
-﻿using System.Diagnostics.Contracts;
+﻿using System;
 
 namespace ShopMe.Application.Models
 {
-    public sealed class ShopList
+    public class ShopList : ShopListDescription
     {
-        public long Id
+        public ShopItem[] Items
         {
             get;
         }
 
-        public string Title
+        public ShopList(long id, string title, ShopItem[] items)
+            : base(id, title)
         {
-            get;
-        }
-
-        public ShopList(long id, string title)
-        {
-            Id = id;
-            Title = title;
+            Items = items ?? Array.Empty<ShopItem>();
         }
     }
 }

@@ -1,9 +1,8 @@
-﻿using System.Collections.ObjectModel;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using ShopMe.Application.Models;
-using ShopMe.Application.Observable.Collections;
 using ShopMe.Application.Services;
 
 namespace ShopMe.Application
@@ -19,17 +18,26 @@ namespace ShopMe.Application
             this.changesProvider = changesProvider;
         }
 
-        public async Task<IObservableCollection<ShopList>> GetActualListsAsync(CancellationToken cancellationToken)
+        public IObservable<ShopListDescriptionChanges> GetActualLists(CancellationToken cancellationToken)
         {
-            var cancellationTokenSource = new CancellationTokenSource();
-            var result = new Observable.Collections.ObservableCollection<ShopList>();
-
-            await foreach (var list in dataProvider.GetShopLists(cancellationTokenSource.Token))
+            return System.Reactive.Linq.Observable.Create<ShopListDescriptionChanges>((observer, cancel) =>
             {
-                result.Add(list);
-            }
+                async Task GetChanges()
+                {
+                    var added = new List<ShopListDescription>();
 
-            return result;
+                    await foreach (var list in dataProvider.GetShopLists(cancellationToken))
+                    {
+                        added.Add(list);
+                    }
+
+                    observer.OnNext(new ShopListDescriptionChanges(added.ToArray()));
+
+                    observer.OnCompleted();
+                }
+
+                return GetChanges();
+            });
         }
     }
 }

@@ -59,6 +59,7 @@ namespace ShopMe.Client
             //Services
             containerRegistry.RegisterInstance(CreateClient());
             //containerRegistry.RegisterSingleton<IShopListService, RSocketShopListService>();
+            containerRegistry.RegisterSingleton<IInteractionDispatcher, MainThreadDispatcher>();
             containerRegistry.RegisterSingleton<IDataProvider, DataProvider>();
             containerRegistry.RegisterSingleton<IChangesProvider, RemoteChangesProvider>();
             containerRegistry.RegisterSingleton<IEventAggregator, EventAggregator>();

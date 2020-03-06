@@ -6,6 +6,6 @@ namespace ShopMe.Application.Services
 {
     public interface IDataProvider
     {
-        IAsyncEnumerable<ShopList> GetShopLists(CancellationToken cancellationToken);
+        IAsyncEnumerable<ShopListDescription> GetShopLists(CancellationToken cancellationToken);
     }
 }

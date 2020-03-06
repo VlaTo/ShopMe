@@ -13,23 +13,32 @@
     </Shell.BackButtonBehavior>
     <ContentPage.Content>
         <ListView
+            x:Name="ListsView"
             ItemsSource="{Binding Path=Items, Mode=OneWay}"
             IsGroupingEnabled="False"
             CachingStrategy="RecycleElement"
-            SelectionMode="None">
+            SelectionMode="None"
+            IsPullToRefreshEnabled="True"
+            ItemTapped="ListsView_OnItemTapped">
             <d:ListView.ItemsSource>
-                <x:Array Type="{x:Type vm:ShopListViewModel}">
-                    <vm:ShopListViewModel Title="Item 1" />
-                    <vm:ShopListViewModel Title="Item 2" />
-                    <vm:ShopListViewModel Title="Item 3" />
-                    <vm:ShopListViewModel Title="Item 4" />
-                    <vm:ShopListViewModel Title="Item 5" />
+                <x:Array Type="{x:Type vm:ListDescriptionViewModel}">
+                    <vm:ListDescriptionViewModel Title="Item 1" />
+                    <vm:ListDescriptionViewModel Title="Item 2" />
+                    <vm:ListDescriptionViewModel Title="Item 3" />
+                    <vm:ListDescriptionViewModel Title="Item 4" />
+                    <vm:ListDescriptionViewModel Title="Item 5" />
                 </x:Array>
             </d:ListView.ItemsSource>
+            <ListView.Behaviors>
+                <prism:EventToCommandBehavior
+                    EventName="ItemTapped"
+                    Command="{Binding Path=TappedCommand, Mode=OneTime}"
+                />
+            </ListView.Behaviors>
             <!--Built in Cells-->
             <ListView.ItemTemplate>
                 <DataTemplate
-                    x:DataType="vm:ShopListViewModel">
+                    x:DataType="vm:ListDescriptionViewModel">
                     <ViewCell>
                         <SwipeView>
                             <SwipeView.RightItems>
@@ -59,7 +68,7 @@
                                     Grid.Row="0"
                                     Grid.Column="1"
                                     FontAttributes="None"
-                                    FontSize="Title"
+                                    FontSize="Subtitle"
                                     Text="{Binding Path=Title, Mode=OneWay}" 
                                     d:Text="{Binding Path=Title}" 
                                 />

@@ -1,33 +1,32 @@
-﻿using System;
+﻿using Prism.AppModel;
 using Prism.Mvvm;
+using Prism.Navigation;
 using ShopMe.Application;
+using ShopMe.Application.Models;
+using ShopMe.Client.Services;
+using System;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
-using System.Linq;
+using System.Reactive.Disposables;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Windows.Input;
-using Prism.AppModel;
-using Prism.Navigation;
-using Xamarin.Essentials;
 using Xamarin.Forms;
-using ShopMe.Application.Observable;
-using ShopMe.Application.Observable.Extensions;
 
 namespace ShopMe.Client.ViewModels
 {
-    public sealed class AppShellViewModel : BindableBase, IInitializeAsync, INavigationAware, IAutoInitialize
+    public sealed class AppShellViewModel : BindableBase, IInitialize, IDestructible, IAutoInitialize
     {
         private readonly IShopMeEngine engine;
         private readonly INavigationService navigation;
+        private readonly IInteractionDispatcher dispatcher;
         private IDisposable disposable;
 
-        public ObservableCollection<ShopListViewModel> Items
+        public ObservableCollection<ListDescriptionViewModel> Items
         {
             get;
         }
 
-        public ObservableCollection<ShopListViewModel> LatestItems
+        public ObservableCollection<ListDescriptionViewModel> LatestItems
         {
             get;
         }
@@ -37,62 +36,96 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
-        public AppShellViewModel(IShopMeEngine engine, INavigationService navigation)
+        public ICommand TappedCommand
+        {
+            get;
+        }
+
+        public AppShellViewModel(
+            IShopMeEngine engine,
+            INavigationService navigation,
+            IInteractionDispatcher dispatcher)
         {
             this.engine = engine;
             this.navigation = navigation;
+            this.dispatcher = dispatcher;
 
-            Items = new ObservableCollection<ShopListViewModel>();
-            LatestItems = new ObservableCollection<ShopListViewModel>();
-            BackCommand = new Command(async () => await navigation.GoBackAsync());
+            disposable = Disposable.Empty;
+
+            Items = new ObservableCollection<ListDescriptionViewModel>();
+            LatestItems = new ObservableCollection<ListDescriptionViewModel>();
+            TappedCommand = new Command<ListDescriptionViewModel>(OnSelectedItemTapped);
+            BackCommand = new Command(OnBackButton);
         }
 
-        public async Task InitializeAsync(INavigationParameters parameters)
+        public void Initialize(INavigationParameters parameters)
         {
             Items.Clear();
 
-            var lists = await engine.GetActualListsAsync(CancellationToken.None);
+            disposable = engine
+                .GetActualLists(CancellationToken.None)
+                .Subscribe(ProcessChanges);
+        }
 
-            disposable = lists.Subscribe(
-                async list =>
+        public void Destroy()
+        {
+            disposable.Dispose();
+        }
+
+        private void ProcessChanges(ShopListDescriptionChanges changes)
+        {
+            dispatcher.Dispatch(() =>
+            {
+                if (0 < changes.Added.Length)
                 {
+                    for (var index = 0; index < changes.Added.Length; index++)
+                    {
+                        var description = changes.Added[index];
+
+                        Items.Add(new ListDescriptionViewModel(description.Id, navigation)
+                        {
+                            Title = description.Title
+                        });
+                    }
+                }
+            });
+
+            /*
                     var model = new ShopListViewModel(list.Id, navigation)
                     {
                         Title = list.Title
                     };
 
                     await MainThread.InvokeOnMainThreadAsync(() => Items.Add(model));
-
-                },
-                async list =>
-                {
-                    var model = Items.FirstOrDefault(item => item.Id == list.Id);
-
-                    if (null != model)
+                    async list =>
                     {
-                        await MainThread.InvokeOnMainThreadAsync(() => Items.Remove(model));
-                    }
-                },
-                async list =>
-                {
-                    var model = Items.FirstOrDefault(item => item.Id == list.Id);
+                        var model = Items.FirstOrDefault(item => item.Id == list.Id);
 
-                    if (null != model)
+                        if (null != model)
+                        {
+                            await MainThread.InvokeOnMainThreadAsync(() => Items.Remove(model));
+                        }
+                    },
+                    async list =>
                     {
-                        await MainThread.InvokeOnMainThreadAsync(() => { model.Title = list.Title; });
+                        var model = Items.FirstOrDefault(item => item.Id == list.Id);
+
+                        if (null != model)
+                        {
+                            await MainThread.InvokeOnMainThreadAsync(() => { model.Title = list.Title; });
+                        }
                     }
-                }
-            );
+             */
         }
 
-        public void OnNavigatedFrom(INavigationParameters parameters)
+        private async void OnBackButton()
         {
-            Debugger.Break();
+            await navigation.GoBackAsync();
         }
 
-        public void OnNavigatedTo(INavigationParameters parameters)
+        private void OnSelectedItemTapped(ListDescriptionViewModel obj)
         {
-            Debugger.Break();
+            Debug.Write("OnSelectedItemTapped");
         }
     }
 }

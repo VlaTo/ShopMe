@@ -14,28 +14,10 @@ namespace ShopMe.Client.Views
 
             var value = Preferences.Get("test-key", "no-test-key");
         }
-        
-        /*private async void Handle_ItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            if (e.Item == null)
-                return;
 
-            await DisplayAlert("Item Tapped", "An item was tapped.", "OK");
-
-            //Deselect Item
-            ((ListView)sender).SelectedItem = null;
-        }*/
-
-        /*private void OnPageAppearing(object sender, EventArgs e)
+        private void TapGestureRecognizer_Tapped(object sender, System.EventArgs e)
         {
-            if (BindingContext is IAppearing appearing)
-            {
-                appearing.Appearing();
-            }
-        }*/
-        private void ListsView_OnItemTapped(object sender, ItemTappedEventArgs e)
-        {
-            Debug.WriteLine("ListsView_OnItemTapped");
+            Debug.WriteLine($"[MainContentPage.TapGestureRecognizer_Tapped]");
         }
     }
 }

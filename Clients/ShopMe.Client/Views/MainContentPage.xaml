@@ -7,6 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:vm="clr-namespace:ShopMe.Client.ViewModels;assembly=ShopMe.Client"
     xmlns:prism="http://prismlibrary.com"
+    xmlns:loc="clr-namespace:ShopMe.Client.Localization;assembly=ShopMe.Client"
     mc:Ignorable="d">
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding Path=BackCommand, Mode=OneTime}" />
@@ -18,8 +19,7 @@
             IsGroupingEnabled="False"
             CachingStrategy="RecycleElement"
             SelectionMode="None"
-            IsPullToRefreshEnabled="True"
-            ItemTapped="ListsView_OnItemTapped">
+            IsPullToRefreshEnabled="True">
             <d:ListView.ItemsSource>
                 <x:Array Type="{x:Type vm:ListDescriptionViewModel}">
                     <vm:ListDescriptionViewModel Title="Item 1" />
@@ -41,6 +41,21 @@
                     x:DataType="vm:ListDescriptionViewModel">
                     <ViewCell>
                         <SwipeView>
+                            <SwipeView.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    NumberOfTapsRequired="1"
+                                    Tapped="TapGestureRecognizer_Tapped">
+                                </TapGestureRecognizer>
+                            </SwipeView.GestureRecognizers>
+                            <SwipeView.LeftItems>
+                                <SwipeItems
+                                    Mode="Execute">
+                                    <SwipeItem
+                                        Text="Delete"
+                                        Command="{Binding Path=Delete, Mode=OneTime}"
+                                    />
+                                </SwipeItems>
+                            </SwipeView.LeftItems>
                             <SwipeView.RightItems>
                                 <SwipeItems
                                     Mode="Reveal">
@@ -50,29 +65,46 @@
                                     />
                                 </SwipeItems>
                             </SwipeView.RightItems>
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto" />
-                                    <ColumnDefinition Width="*" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="*" />
-                                </Grid.RowDefinitions>
-                                <Image
-                                    Grid.Column="0"
-                                    Grid.Row="0"
-                                    Grid.RowSpan="2"
-                                />
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="1"
-                                    FontAttributes="None"
-                                    FontSize="Subtitle"
-                                    Text="{Binding Path=Title, Mode=OneWay}" 
-                                    d:Text="{Binding Path=Title}" 
-                                />
-                            </Grid>
+                            <SwipeView.Content>
+                                <Grid 
+                                    Padding="16">
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="Auto" />
+                                        <ColumnDefinition Width="*" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="*" />
+                                    </Grid.RowDefinitions>
+                                    <Image
+                                        Grid.Column="0"
+                                        Grid.Row="0"
+                                        Grid.RowSpan="2"
+                                    />
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="1"
+                                        FontAttributes="None"
+                                        FontSize="Subtitle"
+                                        Text="{Binding Path=Title, Mode=OneWay}" 
+                                        d:Text="{Binding Path=Title}" 
+                                    />
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        FontAttributes="None"
+                                        FontSize="Default">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <FormattedString.Spans>
+                                                    <Span Text="{x:Static loc:AppResources.ListCompletedLabel}" />
+                                                    <Span Text="{Binding Path=Progress, StringFormat='{0:P}', Mode=OneWay}"/>
+                                                </FormattedString.Spans>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+                            </SwipeView.Content>
                         </SwipeView>
                     </ViewCell>
                 </DataTemplate>

@@ -77,6 +77,7 @@
                                 <Label.FormattedText>
                                     <FormattedString>
                                         <FormattedString.Spans>
+                                            <Span FontSize="Small" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
                                             <Span FontSize="Small" Text="4" />
                                             <Span FontSize="Micro" Text="/" />
                                             <Span FontSize="Micro" Text="6" />

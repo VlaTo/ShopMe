@@ -1,33 +1,43 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading;
-using System.Threading.Tasks;
+﻿using Microsoft.EntityFrameworkCore;
 using ShopMe.Application.Models;
 using ShopMe.Application.Services;
+using ShopMe.Client.Data;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 
 namespace ShopMe.Client.Services
 {
     internal sealed class DataProvider : IDataProvider
     {
-        public DataProvider()
+        private readonly ShopMeDbContext context;
+
+        public DataProvider(ShopMeDbContext context)
         {
+            this.context = context;
         }
 
-        public IAsyncEnumerable<ShopListDescription> GetShopLists(CancellationToken cancellationToken)
+        public async IAsyncEnumerable<ShopListDescription> GetShopLists(CancellationToken cancellationToken)
         {
-            return AsyncEnumerable.Create(cancel =>
+            var shopLists = Array.Empty<Data.Models.ShopList>();
+
+            using (var transaction = await context.Database.BeginTransactionAsync(cancellationToken))
             {
-                static async IAsyncEnumerator<ShopListDescription> Test()
-                {
-                    await Task.CompletedTask;
+                shopLists = await context.ShopLists.AsNoTracking()
+                    .Where(list => list.IsActive)
+                    .OrderBy(list => list.Created)
+                    .ToArrayAsync(cancellationToken);
+            }
 
-                    yield return new ShopListDescription(1, "Lorem Ipsum");
-                    yield return new ShopListDescription(2, "Hsjhfc sjkdkjshfch sdfc");
-                    yield return new ShopListDescription(3, "Udfjhcsj hgefhsd sdfcjsdjf");
-                }
+            foreach (var shopList in shopLists)
+            {
+                yield return new ShopListDescription(shopList.Id, shopList.Title);
+            }
 
-                return Test();
-            });
+            yield return new ShopListDescription(1, "Lorem Ipsum");
+            yield return new ShopListDescription(2, "Hsjhfc sjkdkjshfch sdfc");
+            yield return new ShopListDescription(3, "Udfjhcsj hgefhsd sdfcjsdjf");
         }
     }
 }

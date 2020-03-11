@@ -11,6 +11,11 @@
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding Path=BackCommand, Mode=OneTime}" />
     </Shell.BackButtonBehavior>
+    <!--<ContentPage.Resources>
+        <ResourceDictionary>
+            <
+        </ResourceDictionary>
+    </ContentPage.Resources>-->
     <ContentPage.Content>
         <ListView
             x:Name="ListsView"
@@ -18,8 +23,7 @@
             IsGroupingEnabled="False"
             CachingStrategy="RecycleElement"
             SelectionMode="None"
-            IsPullToRefreshEnabled="True"
-            ItemTapped="ListsView_OnItemTapped">
+            IsPullToRefreshEnabled="True">
             <d:ListView.ItemsSource>
                 <x:Array Type="{x:Type vm:ListDescriptionViewModel}">
                     <vm:ListDescriptionViewModel Title="Item 1" />
@@ -32,7 +36,8 @@
             <ListView.Behaviors>
                 <prism:EventToCommandBehavior
                     EventName="ItemTapped"
-                    Command="{Binding Path=TappedCommand, Mode=OneTime}"
+                    Command="{Binding Path=ItemClick, Mode=OneTime}"
+                    EventArgsParameterPath="Item"
                 />
             </ListView.Behaviors>
             <!--Built in Cells-->
@@ -40,6 +45,47 @@
                 <DataTemplate
                     x:DataType="vm:ListDescriptionViewModel">
                     <ViewCell>
+                        <Grid
+                            Padding="4"
+                            RowSpacing="4"
+                            ColumnSpacing="4"
+                            Height="80"
+                            HeightRequest="">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <Label
+                                Grid.Row="0"
+                                Grid.Column="0"
+                                Grid.ColumnSpan="2"
+                                FontAttributes="None"
+                                FontSize="Subtitle"
+                                Text="{Binding Path=Title, Mode=OneWay}" 
+                                d:Text="{Binding Path=Title}" 
+                            />
+                            <Label
+                                Grid.Row="1"
+                                Grid.Column="1"
+                                FontAttributes="None"
+                                FontSize="Subtitle">
+                                <Label.FormattedText>
+                                    <FormattedString>
+                                        <FormattedString.Spans>
+                                            <Span FontSize="Small" Text="4" />
+                                            <Span FontSize="Micro" Text="/" />
+                                            <Span FontSize="Micro" Text="6" />
+                                        </FormattedString.Spans>
+                                    </FormattedString>
+                                </Label.FormattedText>
+                            </Label>
+                        </Grid>
+                    </ViewCell>
+                    <!-- <ViewCell>
                         <SwipeView>
                             <SwipeView.RightItems>
                                 <SwipeItems
@@ -74,7 +120,7 @@
                                 />
                             </Grid>
                         </SwipeView>
-                    </ViewCell>
+                    </ViewCell> -->
                 </DataTemplate>
             </ListView.ItemTemplate>
 

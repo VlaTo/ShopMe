@@ -10,6 +10,7 @@ using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Threading;
 using System.Windows.Input;
+using ShopMe.Client.Controls;
 using Xamarin.Forms;
 
 namespace ShopMe.Client.ViewModels
@@ -36,7 +37,12 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
-        public ICommand TappedCommand
+        public ICommand ItemClick
+        {
+            get;
+        }
+
+        private IInteractionRequest<long> OpenShopListRequest
         {
             get;
         }
@@ -54,8 +60,9 @@ namespace ShopMe.Client.ViewModels
 
             Items = new ObservableCollection<ListDescriptionViewModel>();
             LatestItems = new ObservableCollection<ListDescriptionViewModel>();
-            TappedCommand = new Command<ListDescriptionViewModel>(OnSelectedItemTapped);
+            ItemClick = new Command<ListDescriptionViewModel>(OnSelectedItemTapped);
             BackCommand = new Command(OnBackButton);
+            OpenShopListRequest = new InteractionRequest<long>();
         }
 
         public void Initialize(INavigationParameters parameters)
@@ -123,9 +130,17 @@ namespace ShopMe.Client.ViewModels
             await navigation.GoBackAsync();
         }
 
-        private void OnSelectedItemTapped(ListDescriptionViewModel obj)
+        private async void OnSelectedItemTapped(ListDescriptionViewModel item)
         {
-            Debug.Write("OnSelectedItemTapped");
+
+            if (null == item)
+            {
+                return;
+            }
+
+            Debug.WriteLine("[AppShellViewModel.OnSelectedItemTapped]");
+
+            //await OpenShopListRequest.Fire(item.Id);
         }
     }
 }

@@ -18,7 +18,6 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
-
         public string Title
         {
             get => title;
@@ -42,6 +41,8 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
+
+
         public ListDescriptionViewModel()
         {
             Execute = new Command(DoExecuteCommand);
@@ -57,7 +58,7 @@ namespace ShopMe.Client.ViewModels
         private void DoExecuteCommand()
         {
             //await DisplayAlert("Item Tapped", "An item was tapped.", "OK");
-            Debug.WriteLine($"[ShopListDescriptionViewModel.DoExecuteCommand] Title: {Title}");
+            Debug.WriteLine($"[ShopListDescriptionViewModel.DoExecuteCommand] Id: {Id}, Title: {Title}");
         }
     }
 }

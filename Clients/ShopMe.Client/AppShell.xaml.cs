@@ -1,5 +1,6 @@
 ﻿using Prism.AppModel;
 using Prism.Navigation;
+using ShopMe.Client.Views;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
@@ -11,6 +12,8 @@ namespace ShopMe.Client
         public AppShell()
         {
             InitializeComponent();
+
+            Routing.RegisterRoute("details", typeof(ShopListContentPage));
 
             //BindingContextChanged += OnBindingChanged;
         }

@@ -12,55 +12,57 @@
     <Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding Path=BackCommand, Mode=OneTime}" />
     </Shell.BackButtonBehavior>
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="TEST" />
+    </ContentPage.ToolbarItems>
     <!--<ContentPage.Resources>
         <ResourceDictionary>
             <
         </ResourceDictionary>
     </ContentPage.Resources>-->
     <ContentPage.Content>
-        <ListView
-            x:Name="ListsView"
-            ItemsSource="{Binding Path=Items, Mode=OneWay}"
-            IsGroupingEnabled="False"
-            CachingStrategy="RecycleElement"
-            SelectionMode="None"
-            IsPullToRefreshEnabled="True">
-            <d:ListView.ItemsSource>
-                <x:Array Type="{x:Type vm:ListDescriptionViewModel}">
-                    <vm:ListDescriptionViewModel Title="Item 1" />
-                    <vm:ListDescriptionViewModel Title="Item 2" />
-                    <vm:ListDescriptionViewModel Title="Item 3" />
-                    <vm:ListDescriptionViewModel Title="Item 4" />
-                    <vm:ListDescriptionViewModel Title="Item 5" />
-                </x:Array>
-            </d:ListView.ItemsSource>
-            <ListView.Behaviors>
-                <prism:EventToCommandBehavior
+        <Grid>
+            <ListView
+                x:Name="ListsView"
+                ItemsSource="{Binding Path=Items, Mode=OneWay}"
+                IsGroupingEnabled="False"
+                CachingStrategy="RecycleElement"
+                SelectionMode="None"
+                IsPullToRefreshEnabled="True">
+                <d:ListView.ItemsSource>
+                    <x:Array Type="{x:Type vm:ListDescriptionViewModel}">
+                        <vm:ListDescriptionViewModel Title="Item 1" />
+                        <vm:ListDescriptionViewModel Title="Item 2" />
+                        <vm:ListDescriptionViewModel Title="Item 3" />
+                        <vm:ListDescriptionViewModel Title="Item 4" />
+                        <vm:ListDescriptionViewModel Title="Item 5" />
+                    </x:Array>
+                </d:ListView.ItemsSource>
+                <ListView.Behaviors>
+                    <prism:EventToCommandBehavior
                     EventName="ItemTapped"
                     Command="{Binding Path=ItemClick, Mode=OneTime}"
                     EventArgsParameterPath="Item"
                 />
-            </ListView.Behaviors>
-            <!--Built in Cells-->
-            <ListView.ItemTemplate>
-                <DataTemplate
+                </ListView.Behaviors>
+                <!--Built in Cells-->
+                <ListView.ItemTemplate>
+                    <DataTemplate
                     x:DataType="vm:ListDescriptionViewModel">
-                    <ViewCell>
-                        <Grid
+                        <ViewCell>
+                            <Grid
                             Padding="4"
                             RowSpacing="4"
-                            ColumnSpacing="4"
-                            Height="80"
-                            HeightRequest="">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto" />
-                                <RowDefinition Height="Auto" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
-                            <Label
+                            ColumnSpacing="4">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Label
                                 Grid.Row="0"
                                 Grid.Column="0"
                                 Grid.ColumnSpan="2"
@@ -69,25 +71,25 @@
                                 Text="{Binding Path=Title, Mode=OneWay}" 
                                 d:Text="{Binding Path=Title}" 
                             />
-                            <Label
+                                <Label
                                 Grid.Row="1"
                                 Grid.Column="1"
                                 FontAttributes="None"
                                 FontSize="Subtitle">
-                                <Label.FormattedText>
-                                    <FormattedString>
-                                        <FormattedString.Spans>
-                                            <Span FontSize="Small" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
-                                            <Span FontSize="Small" Text="4" />
-                                            <Span FontSize="Micro" Text="/" />
-                                            <Span FontSize="Micro" Text="6" />
-                                        </FormattedString.Spans>
-                                    </FormattedString>
-                                </Label.FormattedText>
-                            </Label>
-                        </Grid>
-                    </ViewCell>
-                    <!-- <ViewCell>
+                                    <Label.FormattedText>
+                                        <FormattedString>
+                                            <FormattedString.Spans>
+                                                <Span FontSize="Small" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
+                                                <Span FontSize="Small" Text="4" />
+                                                <Span FontSize="Micro" Text="/" />
+                                                <Span FontSize="Micro" Text="6" />
+                                            </FormattedString.Spans>
+                                        </FormattedString>
+                                    </Label.FormattedText>
+                                </Label>
+                            </Grid>
+                        </ViewCell>
+                        <!-- <ViewCell>
                         <SwipeView>
                             <SwipeView.GestureRecognizers>
                                 <TapGestureRecognizer
@@ -155,11 +157,11 @@
                             </SwipeView.Content>
                         </SwipeView>
                     </ViewCell> -->
-                </DataTemplate>
-            </ListView.ItemTemplate>
+                    </DataTemplate>
+                </ListView.ItemTemplate>
 
-            <!--Custom View Cells-->
-            <!--
+                <!--Custom View Cells-->
+                <!--
     <ListView.ItemTemplate>
       <DataTemplate>
         <ViewCell>
@@ -175,6 +177,22 @@
       </DataTemplate>
     </ListView.ItemTemplate>
     -->
-        </ListView>
+            </ListView>
+            <RelativeLayout
+                WidthRequest="100"
+                HeightRequest="100"
+                HorizontalOptions="End"
+                VerticalOptions="End">
+                <Button Text="ADD">
+                    <Button.IsVisible>
+                        <OnPlatform x:TypeArguments="x:Boolean">
+                            <On Platform="iOS" Value="false" />
+                            <On Platform="Android" Value="true" />
+                            <On Platform="UWP" Value="false" />
+                        </OnPlatform>
+                    </Button.IsVisible>
+                </Button>
+            </RelativeLayout>
+        </Grid>
     </ContentPage.Content>
 </ContentPage>

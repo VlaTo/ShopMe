@@ -5,6 +5,7 @@ using ShopMe.Client.Data;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Threading;
 
 namespace ShopMe.Client.Services
@@ -18,7 +19,7 @@ namespace ShopMe.Client.Services
             this.context = context;
         }
 
-        public async IAsyncEnumerable<ShopListDescription> GetShopLists(CancellationToken cancellationToken)
+        public async IAsyncEnumerable<ShopListDescription> GetShopLists([EnumeratorCancellation] CancellationToken cancellationToken)
         {
             var shopLists = Array.Empty<Data.Models.ShopList>();
 

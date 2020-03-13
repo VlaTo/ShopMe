@@ -3,11 +3,11 @@ using Xamarin.Forms.Xaml;
 
 namespace ShopMe.Client.Views
 {
-    //[QueryProperty(nameof(Id), "id")]
+    [QueryProperty(nameof(ShopListId), "id")]
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShopListContentPage
     {
-        public long Id
+        public long ShopListId
         {
             get; 
             set;

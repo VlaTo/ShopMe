@@ -15,18 +15,13 @@
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="TEST" />
     </ContentPage.ToolbarItems>
-    <!--<ContentPage.Resources>
-        <ResourceDictionary>
-            <
-        </ResourceDictionary>
-    </ContentPage.Resources>-->
     <ContentPage.Content>
         <Grid>
             <ListView
-                x:Name="ListsView"
                 ItemsSource="{Binding Path=Items, Mode=OneWay}"
                 IsGroupingEnabled="False"
                 CachingStrategy="RecycleElement"
+                SeparatorVisibility="None"
                 SelectionMode="None"
                 IsPullToRefreshEnabled="True">
                 <d:ListView.ItemsSource>
@@ -40,60 +35,68 @@
                 </d:ListView.ItemsSource>
                 <ListView.Behaviors>
                     <prism:EventToCommandBehavior
-                    EventName="ItemTapped"
-                    Command="{Binding Path=ItemClick, Mode=OneTime}"
-                    EventArgsParameterPath="Item"
-                />
+                        EventName="ItemTapped"
+                        Command="{Binding Path=ItemClick, Mode=OneTime}"
+                        EventArgsParameterPath="Item"
+                    />
                 </ListView.Behaviors>
-                <!--Built in Cells-->
                 <ListView.ItemTemplate>
                     <DataTemplate
-                    x:DataType="vm:ListDescriptionViewModel">
+                        x:DataType="vm:ListDescriptionViewModel">
                         <ViewCell>
-                            <Grid
-                                RowSpacing="4"
-                                ColumnSpacing="4">
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="*" />
-                                    <ColumnDefinition Width="Auto" />
-                                </Grid.ColumnDefinitions>
-                                <Grid.Padding>
-                                    <OnPlatform x:TypeArguments="Thickness">
-                                        <On Platform="iOS">0, 20, 0, 0</On>
-                                        <On Platform="UWP">16</On>
-                                        <On Platform="Android">4, 8</On>
-                                    </OnPlatform>
-                                </Grid.Padding>
-                                <Label
-                                    Grid.Row="0"
-                                    Grid.Column="0"
-                                    Grid.ColumnSpan="2"
-                                    FontAttributes="None"
-                                    FontSize="Subtitle"
-                                    Text="{Binding Path=Title, Mode=OneWay}" 
-                                    d:Text="{Binding Path=Title}" 
-                                />
-                                <Label
-                                    Grid.Row="1"
-                                    Grid.Column="1"
-                                    FontAttributes="None"
-                                    FontSize="Subtitle">
-                                    <Label.FormattedText>
-                                        <FormattedString>
-                                            <FormattedString.Spans>
-                                                <Span FontSize="Small" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
-                                                <Span FontSize="Small" Text="4" />
-                                                <Span FontSize="Micro" Text="/" />
-                                                <Span FontSize="Micro" Text="6" />
-                                            </FormattedString.Spans>
-                                        </FormattedString>
-                                    </Label.FormattedText>
-                                </Label>
-                            </Grid>
+                            <Frame
+                                BackgroundColor="Azure"
+                                BorderColor="DarkGray"
+                                CornerRadius="2"
+                                Padding="4"
+                                Margin="4"
+                                VerticalOptions="StartAndExpand">
+                                <Grid
+                                    RowSpacing="4"
+                                    ColumnSpacing="4"
+                                    VerticalOptions="StartAndExpand">
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <Grid.ColumnDefinitions>
+                                        <ColumnDefinition Width="*" />
+                                        <ColumnDefinition Width="Auto" />
+                                    </Grid.ColumnDefinitions>
+                                    <Grid.Padding>
+                                        <OnPlatform x:TypeArguments="Thickness">
+                                            <On Platform="iOS">0, 20, 0, 0</On>
+                                            <On Platform="UWP">16</On>
+                                            <On Platform="Android">4, 8</On>
+                                        </OnPlatform>
+                                    </Grid.Padding>
+                                    <Label
+                                        Grid.Row="0"
+                                        Grid.Column="0"
+                                        Grid.ColumnSpan="2"
+                                        FontAttributes="None"
+                                        FontSize="Subtitle"
+                                        Text="{Binding Path=Title, Mode=OneWay}" 
+                                        d:Text="{Binding Path=Title}" 
+                                    />
+                                    <Label
+                                        Grid.Row="1"
+                                        Grid.Column="1"
+                                        FontAttributes="None"
+                                        FontSize="Subtitle">
+                                        <Label.FormattedText>
+                                            <FormattedString>
+                                                <FormattedString.Spans>
+                                                    <Span FontSize="Small" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
+                                                    <Span FontSize="Small" Text="4" />
+                                                    <Span FontSize="Micro" Text="/" />
+                                                    <Span FontSize="Micro" Text="6" />
+                                                </FormattedString.Spans>
+                                            </FormattedString>
+                                        </Label.FormattedText>
+                                    </Label>
+                                </Grid>
+                            </Frame>
                         </ViewCell>
                         <!-- <ViewCell>
                         <SwipeView>
@@ -165,24 +168,6 @@
                     </ViewCell> -->
                     </DataTemplate>
                 </ListView.ItemTemplate>
-
-                <!--Custom View Cells-->
-                <!--
-    <ListView.ItemTemplate>
-      <DataTemplate>
-        <ViewCell>
-          <StackLayout>
-            <Label Text="{Binding Text}" 
-                   d:Text="{Binding .}"
-                   Style="{DynamicResource ListItemTextStyle}" />
-            <Label Text="{Binding Detail}" 
-                   d:Text="Detail"
-                   Style="{DynamicResource ListItemDetailTextStyle}"/>
-          </StackLayout>
-        </ViewCell>
-      </DataTemplate>
-    </ListView.ItemTemplate>
-    -->
             </ListView>
             <RelativeLayout
                 WidthRequest="100"

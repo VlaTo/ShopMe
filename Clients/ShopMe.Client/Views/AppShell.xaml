@@ -1,6 +1,6 @@
 ﻿<?xml version="1.0" encoding="utf-8" ?>
 <Shell
-    x:Class="ShopMe.Client.AppShell"
+    x:Class="ShopMe.Client.Views.AppShell"
     xmlns="http://xamarin.com/schemas/2014/forms"
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
@@ -12,6 +12,10 @@
     prism:ViewModelLocator.AutowireViewModel="True">
     <Shell.Behaviors>
         <c:ShellPageAwareBehavior />
+        <c:InteractionBehavior
+            InteractionRequest="{Binding Path=OpenShopList, Mode=OneWay}"
+            InteractionRequested="OnInteractionRequested"
+        />
     </Shell.Behaviors>
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>

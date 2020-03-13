@@ -51,9 +51,8 @@
                     x:DataType="vm:ListDescriptionViewModel">
                         <ViewCell>
                             <Grid
-                            Padding="4"
-                            RowSpacing="4"
-                            ColumnSpacing="4">
+                                RowSpacing="4"
+                                ColumnSpacing="4">
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto" />
                                     <RowDefinition Height="Auto" />
@@ -62,20 +61,27 @@
                                     <ColumnDefinition Width="*" />
                                     <ColumnDefinition Width="Auto" />
                                 </Grid.ColumnDefinitions>
+                                <Grid.Padding>
+                                    <OnPlatform x:TypeArguments="Thickness">
+                                        <On Platform="iOS">0, 20, 0, 0</On>
+                                        <On Platform="UWP">16</On>
+                                        <On Platform="Android">4, 8</On>
+                                    </OnPlatform>
+                                </Grid.Padding>
                                 <Label
-                                Grid.Row="0"
-                                Grid.Column="0"
-                                Grid.ColumnSpan="2"
-                                FontAttributes="None"
-                                FontSize="Subtitle"
-                                Text="{Binding Path=Title, Mode=OneWay}" 
-                                d:Text="{Binding Path=Title}" 
-                            />
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    FontAttributes="None"
+                                    FontSize="Subtitle"
+                                    Text="{Binding Path=Title, Mode=OneWay}" 
+                                    d:Text="{Binding Path=Title}" 
+                                />
                                 <Label
-                                Grid.Row="1"
-                                Grid.Column="1"
-                                FontAttributes="None"
-                                FontSize="Subtitle">
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    FontAttributes="None"
+                                    FontSize="Subtitle">
                                     <Label.FormattedText>
                                         <FormattedString>
                                             <FormattedString.Spans>

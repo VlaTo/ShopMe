@@ -1,17 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using Xamarin.Forms;
+﻿using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ShopMe.Client.Views
 {
+    //[QueryProperty(nameof(Id), "id")]
     [XamlCompilation(XamlCompilationOptions.Compile)]
-    public partial class ShopListContentPage : ContentPage
+    public partial class ShopListContentPage
     {
+        public long Id
+        {
+            get; 
+            set;
+        }
+
         public ShopListContentPage()
         {
             InitializeComponent();

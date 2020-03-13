@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
+using Unity;
 
 namespace ShopMe.Client.Controls
 {
@@ -12,6 +13,16 @@ namespace ShopMe.Client.Controls
         public abstract bool IsAlive
         {
             get;
+        }
+
+        protected MethodInfo MethodInfo
+        {
+            get;
+        }
+
+        protected WeakEventHandler(MethodInfo methodInfo)
+        {
+            MethodInfo = methodInfo;
         }
 
         static WeakEventHandler()
@@ -107,6 +118,20 @@ namespace ShopMe.Client.Controls
             return Empty;
         }
 
+        private Delegate CreateDelegate(WeakReference target)
+        {
+            if (null == target)
+            {
+                return Delegate.CreateDelegate(typeof(EventHandler<TEventArgs>), MethodInfo);
+            }
+
+            return Delegate.CreateDelegate(
+                typeof(EventHandler<TEventArgs>),
+                target.Target,
+                MethodInfo
+            );
+        }
+
         /// <summary>
         /// 
         /// </summary>
@@ -118,6 +143,11 @@ namespace ShopMe.Client.Controls
             {
                 ;
             }
+
+            public EmptyEventHandler()
+                : base(null)
+            {
+            }
         }
 
         /// <summary>
@@ -125,30 +155,28 @@ namespace ShopMe.Client.Controls
         /// </summary>
         private class SingleEventHandler : WeakEventHandler<TEventArgs>
         {
-            private readonly WeakReference target;
-            private readonly MethodInfo method;
+            private readonly WeakReference reference;
 
-            public override bool IsAlive => target.IsAlive;
+            public override bool IsAlive => reference.IsAlive;
 
-            public object Target => target.Target;
+            public object Target => reference.Target;
 
             public SingleEventHandler(EventHandler<TEventArgs> handler)
+                : base(handler.Method)
             {
-                target = new WeakReference(handler.Target);
-                method = handler.Method;
+                reference = new WeakReference(handler.Target);
             }
 
             public override void Invoke(object sender, TEventArgs e)
             {
-                if (false == target.IsAlive)
+                if (false == reference.IsAlive)
                 {
                     return;
                 }
 
-                var handler = target.Target;
-                var eventHandler = Delegate.CreateDelegate(typeof(EventHandler<TEventArgs>), method);
+                var handler = CreateDelegate(reference);
 
-                eventHandler.DynamicInvoke(handler);
+                handler.DynamicInvoke(sender, e);
             }
         }
 
@@ -157,7 +185,6 @@ namespace ShopMe.Client.Controls
         /// </summary>
         private class CombinedEventHandler : WeakEventHandler<TEventArgs>
         {
-            private readonly MethodInfo method;
             private readonly List<WeakReference> handlers;
             private readonly object gate;
 
@@ -219,9 +246,9 @@ namespace ShopMe.Client.Controls
                 handlers.Add(new WeakReference(handler.Target));
             }
 
-            private CombinedEventHandler(MethodInfo method)
+            private CombinedEventHandler(MethodInfo methodInfo)
+                : base(methodInfo)
             {
-                this.method = method;
                 gate = new object();
                 handlers = new List<WeakReference>();
             }
@@ -251,12 +278,10 @@ namespace ShopMe.Client.Controls
 
             public override void Invoke(object sender, TEventArgs e)
             {
-                var eventHandler = Delegate.CreateDelegate(typeof(EventHandler<TEventArgs>), method);
-                var targets = Handlers;
-
-                foreach (var target in targets)
+                foreach (var target in Handlers)
                 {
-                    eventHandler.DynamicInvoke(target);
+                    var handler = CreateDelegate(target);
+                    handler.DynamicInvoke(sender, e);
                 }
             }
         }

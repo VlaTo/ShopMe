@@ -4,7 +4,7 @@ using Prism.Common;
 using Prism.Navigation;
 using Xamarin.Forms;
 
-namespace ShopMe.Client.Controls
+namespace ShopMe.Client.Controls.Behaviors
 {
     public sealed class ShellPageAwareBehavior : BehaviorBase<Shell>
     {

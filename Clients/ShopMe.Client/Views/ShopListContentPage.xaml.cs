@@ -7,7 +7,7 @@ namespace ShopMe.Client.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShopListContentPage
     {
-        public long ShopListId
+        public string ShopListId
         {
             get; 
             set;

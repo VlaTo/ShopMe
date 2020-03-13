@@ -6,16 +6,22 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="clr-namespace:ShopMe.Client.Views;assembly=ShopMe.Client"
-    xmlns:c="clr-namespace:ShopMe.Client.Controls;assembly=ShopMe.Client"
+    xmlns:b="clr-namespace:ShopMe.Client.Controls.Behaviors;assembly=ShopMe.Client"
+    xmlns:ctx="clr-namespace:ShopMe.Client.ViewModels.Contexts;assembly=ShopMe.Client"
     xmlns:prism="http://prismlibrary.com"
     mc:Ignorable="d"
     prism:ViewModelLocator.AutowireViewModel="True">
     <Shell.Behaviors>
-        <c:ShellPageAwareBehavior />
-        <c:InteractionBehavior
-            InteractionRequest="{Binding Path=OpenShopList, Mode=OneWay}"
-            InteractionRequested="OnInteractionRequested"
-        />
+        <b:ShellPageAwareBehavior />
+        <b:InteractionBehavior
+            InteractionRequest="{Binding Path=OpenShopList, Mode=OneWay}">
+            <b:InteractionBehavior.Requests>
+                <b:OnRequest
+                    x:TypeArguments="ctx:OpenShopListRequestContext"
+                    Raised="OnInteractionRequested"
+                />
+            </b:InteractionBehavior.Requests>
+        </b:InteractionBehavior>
     </Shell.Behaviors>
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>

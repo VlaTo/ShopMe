@@ -24,15 +24,6 @@
                 SeparatorVisibility="None"
                 SelectionMode="None"
                 IsPullToRefreshEnabled="True">
-                <d:ListView.ItemsSource>
-                    <x:Array Type="{x:Type vm:ListDescriptionViewModel}">
-                        <vm:ListDescriptionViewModel Title="Item 1" />
-                        <vm:ListDescriptionViewModel Title="Item 2" />
-                        <vm:ListDescriptionViewModel Title="Item 3" />
-                        <vm:ListDescriptionViewModel Title="Item 4" />
-                        <vm:ListDescriptionViewModel Title="Item 5" />
-                    </x:Array>
-                </d:ListView.ItemsSource>
                 <ListView.Behaviors>
                     <prism:EventToCommandBehavior
                         EventName="ItemTapped"
@@ -43,14 +34,31 @@
                 <ListView.ItemTemplate>
                     <DataTemplate
                         x:DataType="vm:ListDescriptionViewModel">
-                        <ViewCell>
+                        <ViewCell
+                            Height="60">
                             <Frame
                                 BackgroundColor="Azure"
-                                BorderColor="DarkGray"
-                                CornerRadius="2"
-                                Padding="4"
-                                Margin="4"
-                                VerticalOptions="StartAndExpand">
+                                BorderColor="DarkGray">
+                                <Frame.Padding>
+                                    <OnPlatform x:TypeArguments="Thickness">
+                                        <On Platform="iOS" Value="4" />
+                                        <On Platform="Android" Value="4" />
+                                        <On Platform="UWP" Value="8" />
+                                    </OnPlatform>
+                                </Frame.Padding>
+                                <Frame.Margin>
+                                    <OnPlatform x:TypeArguments="Thickness">
+                                        <On Platform="iOS" Value="4" />
+                                        <On Platform="Android" Value="4" />
+                                        <On Platform="UWP" Value="16, 8" />
+                                    </OnPlatform>
+                                </Frame.Margin>
+                                <Frame.CornerRadius>
+                                    <OnPlatform x:TypeArguments="x:Single">
+                                        <On Platform="iOS, Android" Value="4" />
+                                        <On Platform="UWP" Value="4" />
+                                    </OnPlatform>
+                                </Frame.CornerRadius>
                                 <Grid
                                     RowSpacing="4"
                                     ColumnSpacing="4"
@@ -65,9 +73,9 @@
                                     </Grid.ColumnDefinitions>
                                     <Grid.Padding>
                                         <OnPlatform x:TypeArguments="Thickness">
-                                            <On Platform="iOS">0, 20, 0, 0</On>
-                                            <On Platform="UWP">16</On>
-                                            <On Platform="Android">4, 8</On>
+                                            <On Platform="iOS" Value="0,20,0,0" />
+                                            <On Platform="UWP" Value="16" />
+                                            <On Platform="Android" Value="4,8" />
                                         </OnPlatform>
                                     </Grid.Padding>
                                     <Label

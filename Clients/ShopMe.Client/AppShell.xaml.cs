@@ -28,7 +28,7 @@ namespace ShopMe.Client
             }
         }*/
 
-        private void OnShellNavigated(object sender, ShellNavigatedEventArgs e)
+        /*private void OnShellNavigated(object sender, ShellNavigatedEventArgs e)
         {
             var context = BindingContext;
 
@@ -39,6 +39,6 @@ namespace ShopMe.Client
                     requestor.Initialize(null);
                 }
             }
-        }
+        }*/
     }
 }

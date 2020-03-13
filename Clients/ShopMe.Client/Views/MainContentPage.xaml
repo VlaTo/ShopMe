@@ -50,8 +50,7 @@
                             Padding="4"
                             RowSpacing="4"
                             ColumnSpacing="4"
-                            Height="80"
-                            HeightRequest="">
+                            HeightRequest="80">
                             <Grid.RowDefinitions>
                                 <RowDefinition Height="Auto" />
                                 <RowDefinition Height="Auto" />

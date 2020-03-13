@@ -9,8 +9,10 @@
     xmlns:c="clr-namespace:ShopMe.Client.Controls;assembly=ShopMe.Client"
     xmlns:prism="http://prismlibrary.com"
     mc:Ignorable="d"
-    prism:ViewModelLocator.AutowireViewModel="True"
-    Navigated="OnShellNavigated">
+    prism:ViewModelLocator.AutowireViewModel="True">
+    <Shell.Behaviors>
+        <c:ShellPageAwareBehavior />
+    </Shell.Behaviors>
     <Shell.FlyoutHeaderTemplate>
         <DataTemplate>
             <Grid

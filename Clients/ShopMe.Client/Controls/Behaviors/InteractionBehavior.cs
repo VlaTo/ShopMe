@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
-using System.Diagnostics;
-using System.Reflection;
+﻿using System.Collections.Generic;
 using Prism.Behaviors;
 using ShopMe.Client.Controls.Interaction;
 using Xamarin.Forms;
@@ -16,21 +11,33 @@ namespace ShopMe.Client.Controls.Behaviors
     [ContentProperty(nameof(Requests))]
     public sealed class InteractionBehavior : BehaviorBase<VisualElement>
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static readonly BindableProperty InteractionRequestProperty;
 
         private IInteractionRequest interactionRequest;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IInteractionRequest InteractionRequest
         {
             get => (IInteractionRequest) GetValue(InteractionRequestProperty);
             set => SetValue(InteractionRequestProperty, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public IList<IOnRequest> Requests
         {
             get;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public InteractionBehavior()
         {
             Requests = new List<IOnRequest>();

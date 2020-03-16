@@ -13,16 +13,27 @@ namespace ShopMe.Client.Controls.Behaviors
     public sealed class RequestEventArgs<TContext> : EventArgs
         where TContext : InteractionRequestContext
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public TContext Context
         {
             get;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Action Callback
         {
             get;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="callback"></param>
         public RequestEventArgs(TContext context, Action callback)
         {
             Context = context;
@@ -35,6 +46,10 @@ namespace ShopMe.Client.Controls.Behaviors
     /// </summary>
     public interface IOnRequest
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         void Invoke(InteractionRequestEventArgs e);
     }
 
@@ -47,17 +62,27 @@ namespace ShopMe.Client.Controls.Behaviors
     {
         private WeakEventHandler<RequestEventArgs<TContext>> raised;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<RequestEventArgs<TContext>> Raised
         {
-            add => raised = WeakEventHandler<RequestEventArgs<TContext>>.Combine(raised, value);
-            remove => raised = WeakEventHandler<RequestEventArgs<TContext>>.Remove(raised, value);
+            add => raised = WeakEventHandler.Combine(raised, value);
+            remove => raised = WeakEventHandler.Remove(raised, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public OnRequest()
         {
-            raised = WeakEventHandler<RequestEventArgs<TContext>>.Empty;
+            raised = WeakEventHandler.Empty<RequestEventArgs<TContext>>();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="e"></param>
         public void Invoke(InteractionRequestEventArgs e)
         {
             if (e.Context is TContext context)

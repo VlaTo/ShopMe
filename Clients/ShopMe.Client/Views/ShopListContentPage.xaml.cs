@@ -1,4 +1,5 @@
-﻿using Xamarin.Forms;
+﻿using System.ComponentModel;
+using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 
 namespace ShopMe.Client.Views
@@ -7,7 +8,8 @@ namespace ShopMe.Client.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class ShopListContentPage
     {
-        public string ShopListId
+        [System.ComponentModel.TypeConverter(typeof(Int64Converter))]
+        public long ShopListId
         {
             get; 
             set;

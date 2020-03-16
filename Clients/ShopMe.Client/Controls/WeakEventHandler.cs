@@ -2,14 +2,19 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
-using Unity;
 
 namespace ShopMe.Client.Controls
 {
-    public abstract class WeakEventHandler<TEventArgs> where TEventArgs : EventArgs
+    /// <summary>
+    /// 
+    /// </summary>
+    /// <typeparam name="TEventArgs"></typeparam>
+    public abstract class WeakEventHandler<TEventArgs>
+        where TEventArgs : EventArgs
     {
-        public static readonly WeakEventHandler<TEventArgs> Empty;
-
+        /// <summary>
+        /// 
+        /// </summary>
         public abstract bool IsAlive
         {
             get;
@@ -25,100 +30,14 @@ namespace ShopMe.Client.Controls
             MethodInfo = methodInfo;
         }
 
-        static WeakEventHandler()
-        {
-            Empty = new EmptyEventHandler();
-
-            //EventHandler<EventArgs>.Combine(Delegate a, Delegate b)
-            //EventHandler<EventArgs>.CreateDelegate(Type type, MethodInfo method)
-            //temp.Method
-            //temp.Target
-            //temp.Invoke();
-        }
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         public abstract void Invoke(object sender, TEventArgs e);
 
-        public static WeakEventHandler<TEventArgs> Combine(WeakEventHandler<TEventArgs> source, EventHandler<TEventArgs> handler)
-        {
-            if (null == source)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            if (null == handler)
-            {
-                throw new ArgumentNullException(nameof(handler));
-            }
-
-            switch (source)
-            {
-                case EmptyEventHandler _:
-                {
-                    return new SingleEventHandler(handler);
-                }
-
-                case SingleEventHandler target:
-                {
-                    return new CombinedEventHandler(target, handler);
-                }
-
-                case CombinedEventHandler combined:
-                {
-                    if (ReferenceEquals(Empty, handler))
-                    {
-                        return source;
-                    }
-
-                    combined.Combine(handler);
-
-                    return combined;
-                }
-            }
-
-            return Empty;
-        }
-
-        public static WeakEventHandler<TEventArgs> Remove(WeakEventHandler<TEventArgs> source, EventHandler<TEventArgs> handler)
-        {
-            if (null == source)
-            {
-                throw new ArgumentNullException(nameof(source));
-            }
-
-            if (null == handler)
-            {
-                throw new ArgumentNullException(nameof(handler));
-            }
-
-            switch (source)
-            {
-                case SingleEventHandler target:
-                {
-                    if (ReferenceEquals(target.Target, handler.Target))
-                    {
-                        return Empty;
-                    }
-
-                    return target;
-                }
-
-                case CombinedEventHandler combined:
-                {
-                    if (ReferenceEquals(Empty, handler))
-                    {
-                        return source;
-                    }
-
-                    combined.Remove(handler);
-
-                    return combined;
-                }
-            }
-
-            return Empty;
-        }
-
-        private Delegate CreateDelegate(WeakReference target)
+        protected Delegate CreateDelegate(WeakReference target)
         {
             if (null == target)
             {
@@ -131,12 +50,127 @@ namespace ShopMe.Client.Controls
                 MethodInfo
             );
         }
+    }
+
+    /// <summary>
+    /// 
+    /// </summary>
+    public static class WeakEventHandler
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TEventArgs"></typeparam>
+        /// <returns></returns>
+        public static WeakEventHandler<TEventArgs> Empty<TEventArgs>()
+            where TEventArgs : EventArgs
+            =>
+            EmptyEventHandler<TEventArgs>.Empty;
 
         /// <summary>
         /// 
         /// </summary>
-        private class EmptyEventHandler : WeakEventHandler<TEventArgs>
+        /// <typeparam name="TEventArgs"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        public static WeakEventHandler<TEventArgs> Combine<TEventArgs>(WeakEventHandler<TEventArgs> source, EventHandler<TEventArgs> handler)
+            where TEventArgs : EventArgs
         {
+            if (null == source)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (null == handler)
+            {
+                throw new ArgumentNullException(nameof(handler));
+            }
+
+            switch (source)
+            {
+                case EmptyEventHandler<TEventArgs> _:
+                    {
+                        return new SingleEventHandler<TEventArgs>(handler);
+                    }
+
+                case SingleEventHandler<TEventArgs> target:
+                    {
+                        return new CombinedEventHandler<TEventArgs>(target, handler);
+                    }
+
+                case CombinedEventHandler<TEventArgs> combined:
+                    {
+                        if (ReferenceEquals(Empty<TEventArgs>(), handler))
+                        {
+                            return source;
+                        }
+
+                        combined.Combine(handler);
+
+                        return combined;
+                    }
+            }
+
+            return Empty<TEventArgs>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <typeparam name="TEventArgs"></typeparam>
+        /// <param name="source"></param>
+        /// <param name="handler"></param>
+        /// <returns></returns>
+        public static WeakEventHandler<TEventArgs> Remove<TEventArgs>(WeakEventHandler<TEventArgs> source, EventHandler<TEventArgs> handler)
+            where TEventArgs : EventArgs
+        {
+            if (null == source)
+            {
+                throw new ArgumentNullException(nameof(source));
+            }
+
+            if (null == handler)
+            {
+                throw new ArgumentNullException(nameof(handler));
+            }
+
+            switch (source)
+            {
+                case SingleEventHandler<TEventArgs> target:
+                    {
+                        if (ReferenceEquals(target.Target, handler.Target))
+                        {
+                            return Empty<TEventArgs>();
+                        }
+
+                        return target;
+                    }
+
+                case CombinedEventHandler<TEventArgs> combined:
+                    {
+                        if (ReferenceEquals(Empty<TEventArgs>(), handler))
+                        {
+                            return source;
+                        }
+
+                        combined.Remove(handler);
+
+                        return combined;
+                    }
+            }
+
+            return Empty<TEventArgs>();
+        }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        private sealed class EmptyEventHandler<TEventArgs> : WeakEventHandler<TEventArgs>
+            where TEventArgs : EventArgs
+        {
+            public static readonly EmptyEventHandler<TEventArgs> Empty;
+
             public override bool IsAlive => false;
 
             public override void Invoke(object sender, TEventArgs e)
@@ -144,16 +178,22 @@ namespace ShopMe.Client.Controls
                 ;
             }
 
-            public EmptyEventHandler()
+            private EmptyEventHandler()
                 : base(null)
             {
+            }
+
+            static EmptyEventHandler()
+            {
+                Empty = new EmptyEventHandler<TEventArgs>();
             }
         }
 
         /// <summary>
         /// 
         /// </summary>
-        private class SingleEventHandler : WeakEventHandler<TEventArgs>
+        private sealed class SingleEventHandler<TEventArgs> : WeakEventHandler<TEventArgs>
+            where TEventArgs : EventArgs
         {
             private readonly WeakReference reference;
 
@@ -183,7 +223,8 @@ namespace ShopMe.Client.Controls
         /// <summary>
         /// 
         /// </summary>
-        private class CombinedEventHandler : WeakEventHandler<TEventArgs>
+        private sealed class CombinedEventHandler<TEventArgs> : WeakEventHandler<TEventArgs>
+            where TEventArgs : EventArgs
         {
             private readonly List<WeakReference> handlers;
             private readonly object gate;
@@ -235,7 +276,7 @@ namespace ShopMe.Client.Controls
                 }
             }
 
-            public CombinedEventHandler(SingleEventHandler source, EventHandler<TEventArgs> handler)
+            public CombinedEventHandler(SingleEventHandler<TEventArgs> source, EventHandler<TEventArgs> handler)
                 : this(handler.Method)
             {
                 if (source.IsAlive)

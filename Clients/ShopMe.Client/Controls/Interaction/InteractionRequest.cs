@@ -1,21 +1,29 @@
 ﻿using System;
-using System.Threading.Tasks;
 
 namespace ShopMe.Client.Controls.Interaction
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class InteractionRequest : IInteractionRequest
     {
         private WeakEventHandler<InteractionRequestEventArgs> raised;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<InteractionRequestEventArgs> Raised
         {
-            add => raised = WeakEventHandler<InteractionRequestEventArgs>.Combine(raised, value);
-            remove => raised = WeakEventHandler<InteractionRequestEventArgs>.Remove(raised, value);
+            add => raised = WeakEventHandler.Combine(raised, value);
+            remove => raised = WeakEventHandler.Remove(raised, value);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public InteractionRequest()
         {
-            raised = WeakEventHandler<InteractionRequestEventArgs>.Empty;
+            raised = WeakEventHandler.Empty<InteractionRequestEventArgs>();
         }
 
         protected void DoRaise(InteractionRequestEventArgs e)
@@ -31,6 +39,11 @@ namespace ShopMe.Client.Controls.Interaction
     public class InteractionRequest<TContext> : InteractionRequest
         where TContext : InteractionRequestContext
     {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        /// <param name="callback"></param>
         public void Raise(TContext context, Action callback)
         {
             if (null == callback)

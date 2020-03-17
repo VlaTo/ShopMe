@@ -1,4 +1,4 @@
-﻿using ShopMe.Client.Controls.Interaction;
+﻿using ShopMe.Client.Controls.Behaviors;
 using ShopMe.Client.ViewModels.Contexts;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
@@ -8,26 +8,20 @@ namespace ShopMe.Client.Views
     [XamlCompilation(XamlCompilationOptions.Compile)]
     public partial class AppShell
     {
+        private const string detailsPageName = "details";
+
         public AppShell()
         {
             InitializeComponent();
 
-            Routing.RegisterRoute("details", typeof(ShopListContentPage));
+            Routing.RegisterRoute(detailsPageName, typeof(ShopListContentPage));
         }
 
-        private async void OnInteractionRequested(object sender, InteractionRequestEventArgs e)
+        private async void OnInteractionRequested(object sender, RequestEventArgs<OpenShopListRequestContext> e)
         {
-            switch (e.Context)
-            {
-                case OpenShopListRequestContext open:
-                {
-                    await Shell.Current.GoToAsync($"details?id={open.Id}");
-                    
-                    e.Callback.Invoke();
+            await Shell.Current.GoToAsync($"{detailsPageName}?id={e.Context.Id}");
 
-                    break;
-                }
-            }
+            e.Callback.Invoke();
         }
     }
 }

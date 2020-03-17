@@ -31,26 +31,32 @@ namespace ShopMe.Client.ViewModels
             set => SetProperty(ref progress, value);
         }
 
-        public bool Completed
+        public bool IsCompleted
         {
             get => completed;
             set => SetProperty(ref completed, value);
         }
 
-        public ICommand Execute
+        public Command OpenDetails
         {
             get;
         }
 
-        public ICommand Delete
+        public Command Remove
+        {
+            get;
+        }
+
+        public Command Complete
         {
             get;
         }
 
         public ListDescriptionViewModel()
         {
-            Execute = new Command(DoExecuteCommand);
-            Delete = new Command(DoDeleteCommand);
+            OpenDetails = new Command(DoExecuteCommand);
+            Remove = new Command(DoRemoveCommand);
+            Complete = new Command(DoComplete);
         }
 
         public ListDescriptionViewModel(long id, INavigationService navigation)
@@ -66,9 +72,14 @@ namespace ShopMe.Client.ViewModels
             Debug.WriteLine($"[ShopListDescriptionViewModel.DoExecuteCommand] Id: {Id}, Title: {Title}");
         }
 
-        private void DoDeleteCommand(object obj)
+        private void DoRemoveCommand(object obj)
         {
             Debug.WriteLine($"[ShopListDescriptionViewModel.DoDeleteCommand] Title: {Title}");
+        }
+
+        private void DoComplete()
+        {
+            Debug.WriteLine($"[ShopListDescriptionViewModel.DoComplete] Title: {Title}");
         }
     }
 }

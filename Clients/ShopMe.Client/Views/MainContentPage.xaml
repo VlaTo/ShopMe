@@ -9,9 +9,9 @@
     xmlns:prism="http://prismlibrary.com"
     xmlns:loc="clr-namespace:ShopMe.Client.Localization;assembly=ShopMe.Client"
     mc:Ignorable="d">
-    <Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding Path=BackCommand, Mode=OneTime}" />
-    </Shell.BackButtonBehavior>
+    <!--<Shell.BackButtonBehavior>
+        <BackButtonBehavior Command="{Binding Path=BackClick, Mode=OneTime}" />
+    </Shell.BackButtonBehavior>-->
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="TEST" />
     </ContentPage.ToolbarItems>
@@ -23,7 +23,9 @@
                 CachingStrategy="RecycleElement"
                 SeparatorVisibility="None"
                 SelectionMode="None"
-                IsPullToRefreshEnabled="True">
+                IsPullToRefreshEnabled="True"
+                RefreshCommand="{Binding Path=RefreshList, Mode=OneTime}"
+                RowHeight="80">
                 <d:ListView.ItemsSource>
                     <x:Array Type="{x:Type vm:ListDescriptionViewModel}">
                         <vm:ListDescriptionViewModel Title="Item 1" />
@@ -44,59 +46,98 @@
                     <DataTemplate
                         x:DataType="vm:ListDescriptionViewModel">
                         <ViewCell>
-                            <Frame
-                                BackgroundColor="Azure"
-                                BorderColor="DarkGray"
-                                CornerRadius="2"
-                                Padding="4"
-                                Margin="4"
-                                VerticalOptions="StartAndExpand">
-                                <Grid
-                                    RowSpacing="4"
-                                    ColumnSpacing="4"
-                                    VerticalOptions="StartAndExpand">
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="Auto" />
-                                    </Grid.RowDefinitions>
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="*" />
-                                        <ColumnDefinition Width="Auto" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.Padding>
-                                        <OnPlatform x:TypeArguments="Thickness">
-                                            <On Platform="iOS">0, 20, 0, 0</On>
-                                            <On Platform="UWP">16</On>
-                                            <On Platform="Android">4, 8</On>
-                                        </OnPlatform>
-                                    </Grid.Padding>
-                                    <Label
-                                        Grid.Row="0"
-                                        Grid.Column="0"
-                                        Grid.ColumnSpan="2"
-                                        FontAttributes="None"
-                                        FontSize="Subtitle"
-                                        Text="{Binding Path=Title, Mode=OneWay}" 
-                                        d:Text="{Binding Path=Title}" 
-                                    />
-                                    <Label
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        FontAttributes="None"
-                                        FontSize="Subtitle">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <FormattedString.Spans>
-                                                    <Span FontSize="Small" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
-                                                    <Span FontSize="Small" Text="4" />
-                                                    <Span FontSize="Micro" Text="/" />
-                                                    <Span FontSize="Micro" Text="6" />
-                                                </FormattedString.Spans>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </Grid>
-                            </Frame>
+                            <SwipeView>
+                                <SwipeView.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        NumberOfTapsRequired="1"
+                                        Tapped="TapGestureRecognizer_Tapped">
+                                    </TapGestureRecognizer>
+                                </SwipeView.GestureRecognizers>
+                                <SwipeView.LeftItems>
+                                    <SwipeItems
+                                        SwipeBehaviorOnInvoked="Close"
+                                        Mode="Execute">
+                                        <SwipeItem
+                                            BackgroundColor="Red"
+                                            Command="{Binding Path=Remove, Mode=OneTime}"
+                                            Text="Delete"
+                                        />
+                                    </SwipeItems>
+                                </SwipeView.LeftItems>
+                                <SwipeView.RightItems>
+                                    <SwipeItems>
+                                        <SwipeItem
+                                            BackgroundColor="Green"
+                                            Command="{Binding Path=Complete, Mode=OneTime}"
+                                        />
+                                    </SwipeItems>
+                                </SwipeView.RightItems>
+                                <SwipeView.Content>
+                                    <Frame
+                                        BackgroundColor="Azure"
+                                        BorderColor="DarkGray"
+                                        CornerRadius="2"
+                                        Padding="4"
+                                        Margin="4"
+                                        VerticalOptions="StartAndExpand">
+                                        <Grid
+                                            RowSpacing="4"
+                                            ColumnSpacing="4"
+                                            VerticalOptions="StartAndExpand">
+                                            <Grid.RowDefinitions>
+                                                <RowDefinition Height="Auto" />
+                                                <RowDefinition Height="Auto" />
+                                            </Grid.RowDefinitions>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="*" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Grid.Padding>
+                                                <OnPlatform x:TypeArguments="Thickness">
+                                                    <On Platform="iOS">0, 20, 0, 0</On>
+                                                    <On Platform="UWP">16</On>
+                                                    <On Platform="Android">4, 8</On>
+                                                </OnPlatform>
+                                            </Grid.Padding>
+                                            <Label
+                                                Grid.Row="0"
+                                                Grid.Column="0"
+                                                Grid.ColumnSpan="2"
+                                                FontAttributes="None"
+                                                FontSize="Subtitle"
+                                                TextType="Text"
+                                                TextDecorations="None"
+                                                
+                                                Text="{Binding Path=Title, Mode=OneWay}" 
+                                                d:Text="{Binding Path=Title}" 
+                                            />
+                                            <Label
+                                                Grid.Row="1"
+                                                Grid.Column="0"
+                                                FontAttributes="None"
+                                                FontSize="Subtitle">
+                                                <Label.FormattedText>
+                                                    <FormattedString>
+                                                        <FormattedString.Spans>
+                                                            <Span FontSize="Micro" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
+                                                            <Span FontSize="Small" Text="4" />
+                                                            <Span FontSize="Micro" Text="/" />
+                                                            <Span FontSize="Micro" Text="6" />
+                                                        </FormattedString.Spans>
+                                                    </FormattedString>
+                                                </Label.FormattedText>
+                                            </Label>
+                                        </Grid>
+                                    </Frame>
+                                </SwipeView.Content>
+                                <SwipeView.Margin>
+                                    <OnPlatform x:TypeArguments="Thickness">
+                                        <On Platform="iOS" Value="4" />
+                                        <On Platform="Android" Value="4" />
+                                        <On Platform="UWP" Value="4" />
+                                    </OnPlatform>
+                                </SwipeView.Margin>
+                            </SwipeView>
                         </ViewCell>
                         <!-- <ViewCell>
                         <SwipeView>

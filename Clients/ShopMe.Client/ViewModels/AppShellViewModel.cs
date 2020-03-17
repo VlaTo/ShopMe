@@ -9,6 +9,7 @@ using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Reactive.Disposables;
 using System.Threading;
+using System.Threading.Tasks;
 using System.Windows.Input;
 using ShopMe.Client.Controls;
 using ShopMe.Client.Controls.Interaction;
@@ -34,17 +35,22 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
-        public ICommand BackCommand
+        public Command GoBack
         {
             get;
         }
 
-        public ICommand ItemClick
+        public Command RefreshList
         {
             get;
         }
 
-        public InteractionRequest<OpenShopListRequestContext> OpenShopList
+        public Command<ListDescriptionViewModel> OpenDetails
+        {
+            get;
+        }
+
+        public InteractionRequest<OpenShopListRequestContext> OpenDetailsRequired
         {
             get;
         }
@@ -62,9 +68,10 @@ namespace ShopMe.Client.ViewModels
 
             Items = new ObservableCollection<ListDescriptionViewModel>();
             LatestItems = new ObservableCollection<ListDescriptionViewModel>();
-            ItemClick = new Command<ListDescriptionViewModel>(OnItemClick);
-            BackCommand = new Command(OnBackButton);
-            OpenShopList = new InteractionRequest<OpenShopListRequestContext>();
+            OpenDetails = new Command<ListDescriptionViewModel>(OnOpenDetails);
+            GoBack = new Command(OnBackButton);
+            RefreshList = new Command(OnRefreshList);
+            OpenDetailsRequired = new InteractionRequest<OpenShopListRequestContext>();
         }
 
         public void Initialize(INavigationParameters parameters)
@@ -132,14 +139,19 @@ namespace ShopMe.Client.ViewModels
             await navigation.GoBackAsync();
         }
 
-        private void OnItemClick(ListDescriptionViewModel item)
+        private async void OnRefreshList()
+        {
+            await Task.Delay(TimeSpan.FromMilliseconds(600.0d));
+        }
+
+        private void OnOpenDetails(ListDescriptionViewModel item)
         {
             if (null == item)
             {
                 return;
             }
 
-            OpenShopList.Raise(new OpenShopListRequestContext(item.Id), () =>
+            OpenDetailsRequired.Raise(new OpenShopListRequestContext(item.Id), () =>
             {
                 Debug.WriteLine("[AppShellViewModel.OnSelectedItemTapped] Request callback");
             });

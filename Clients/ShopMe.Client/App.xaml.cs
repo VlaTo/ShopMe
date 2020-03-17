@@ -73,7 +73,7 @@ namespace ShopMe.Client
 
             //Registering Views+ViewModels
             containerRegistry.RegisterForNavigation<AppShell, AppShellViewModel>();
-            //containerRegistry.RegisterForNavigation<MainContentPage, MainContentPageViewModel>();
+            containerRegistry.RegisterForNavigation<ShopListContentPage, ShopListContentViewModel>();
             containerRegistry.RegisterForNavigation<AboutPage, AboutPageViewModel>();
         }
 

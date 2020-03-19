@@ -4,6 +4,7 @@ using ShopMe.Application.Services;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ShopMe.Console
 {
@@ -38,6 +39,12 @@ namespace ShopMe.Console
                 bytes
             );
             return enumerable;*/
+        }
+
+        public Task<ShopListDescription> GetShopListAsync(long id, CancellationToken cancellationToken)
+        {
+            var list = new ShopListDescription(id, "ShopList" + id);
+            return Task.FromResult(list);
         }
     }
 }

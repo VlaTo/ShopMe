@@ -7,27 +7,21 @@ using System.Text;
 
 namespace ShopMe.Client.ViewModels
 {
-    public class ViewModelBase : BindableBase, IInitialize, INavigationAware, IDestructible
+    public class ViewModelBase : BindableBase
     {
-        private string _title;
-
-        protected INavigationService NavigationService
-        {
-            get; 
-        }
+        private string title;
 
         public string Title
         {
-            get => _title;
-            set => SetProperty(ref _title, value);
+            get => title;
+            set => SetProperty(ref title, value);
         }
 
-        public ViewModelBase(INavigationService navigationService)
+        protected ViewModelBase()
         {
-            NavigationService = navigationService;
         }
 
-        public virtual void Initialize(INavigationParameters parameters)
+        /*public virtual void Initialize(INavigationParameters parameters)
         {
 
         }
@@ -45,6 +39,6 @@ namespace ShopMe.Client.ViewModels
         public virtual void Destroy()
         {
 
-        }
+        }*/
     }
 }

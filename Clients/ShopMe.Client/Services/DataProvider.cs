@@ -7,6 +7,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
 
 namespace ShopMe.Client.Services
 {
@@ -36,11 +37,11 @@ namespace ShopMe.Client.Services
                 yield return new ShopListDescription(shopList.Id, shopList.Title);
             }
 
-            yield return new ShopListDescription(1, "Lorem ipsum dolor sit amet");
-            yield return new ShopListDescription(2, "Consectetur adipiscing elit");
-            yield return new ShopListDescription(3, "Aenean ullamcorper congue arcu");
-            yield return new ShopListDescription(4, "Duis nec turpis elit");
-            yield return new ShopListDescription(5, "Mauris ullamcorper pretium");
+            yield return GetShopListDescription(1);
+            yield return GetShopListDescription(2);
+            yield return GetShopListDescription(3);
+            yield return GetShopListDescription(4);
+            yield return GetShopListDescription(5);
 
             /*
              * Aliquam imperdiet ac odio sed efficitur. Vestibulum tristique lorem at urna faucibus, id elementum eros volutpat.
@@ -58,6 +59,47 @@ namespace ShopMe.Client.Services
              * Suspendisse ut tellus commodo, dictum erat at, rhoncus justo. Quisque eget ante faucibus, pulvinar quam sed,
              * eleifend velit.
              */
+        }
+
+        public Task<ShopListDescription> GetShopListAsync(long id, CancellationToken cancellationToken)
+        {
+            return Task.FromResult(GetShopListDescription(id));
+        }
+
+        private static ShopListDescription GetShopListDescription(long id)
+        {
+            switch (id)
+            {
+                case 1:
+                {
+                    return new ShopListDescription(id, "Lorem ipsum dolor sit amet");
+                }
+
+                case 2:
+                {
+                    return new ShopListDescription(id, "Consectetur adipiscing elit");
+                }
+
+                case 3:
+                {
+                    return new ShopListDescription(id, "Aenean ullamcorper congue arcu");
+                }
+
+                case 4:
+                {
+                    return new ShopListDescription(id, "Duis nec turpis elit");
+                }
+
+                case 5:
+                {
+                    return new ShopListDescription(id, "Mauris ullamcorper pretium");
+                }
+
+                default:
+                {
+                    return new ShopListDescription(id, "Quisque et viverra diam");
+                }
+            }
         }
     }
 }

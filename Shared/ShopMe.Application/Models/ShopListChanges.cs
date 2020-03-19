@@ -24,10 +24,15 @@ namespace ShopMe.Application.Models
             get;
         }
 
-        public ShopListChanges(long id, ShopItem[] added, ShopItem[] updated, long[] deleted)
+        public ShopListChanges(long id, ShopItem[] added, ShopItem[] updated = null, long[] deleted = null)
         {
+            if (null == added)
+            {
+                throw new ArgumentNullException(nameof(added));
+            }
+
             Id = id;
-            Added = added ?? Array.Empty<ShopItem>();
+            Added = added;
             Updated = updated ?? Array.Empty<ShopItem>();
             Deleted = deleted ?? Array.Empty<long>();
         }

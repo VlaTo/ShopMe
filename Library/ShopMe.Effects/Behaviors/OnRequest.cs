@@ -1,10 +1,8 @@
-﻿using ShopMe.Client.Controls.Interaction;
-using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System;
+using ShopMe.Effects.Interaction;
 using Xamarin.Forms;
 
-namespace ShopMe.Client.Controls.Behaviors
+namespace ShopMe.Effects.Behaviors
 {
     /// <summary>
     /// 

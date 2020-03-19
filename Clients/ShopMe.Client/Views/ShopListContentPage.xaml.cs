@@ -1,5 +1,5 @@
-﻿using System.ComponentModel;
-using Xamarin.Forms;
+﻿using ShopMe.Effects.Behaviors;
+using ShopMe.Effects.Interaction;
 using Xamarin.Forms.Xaml;
 
 namespace ShopMe.Client.Views
@@ -10,6 +10,11 @@ namespace ShopMe.Client.Views
         public ShopListContentPage()
         {
             InitializeComponent();
+        }
+
+        private void OnUpdateShopListRequested(object sender, RequestEventArgs<InteractionRequestContext> e)
+        {
+            Dispatcher.BeginInvokeOnMainThread(e.Callback);
         }
     }
 }

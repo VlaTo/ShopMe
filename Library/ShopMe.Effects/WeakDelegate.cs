@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace ShopMe.Client.Controls
+namespace ShopMe.Effects
 {
     internal sealed class WeakDelegate<TDelegate> : IEquatable<TDelegate>
         where TDelegate : Delegate

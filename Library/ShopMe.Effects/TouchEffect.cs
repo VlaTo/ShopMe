@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Xamarin.Forms;
 
-namespace ShopMe.Client.Controls.Effects
+namespace ShopMe.Effects
 {
     public static class TouchEffect
     {
@@ -24,7 +24,7 @@ namespace ShopMe.Client.Controls.Effects
 
         private static void DoColorPropertyChanged(BindableObject bindable, object oldvalue, object newvalue)
         {
-            if (false == (bindable is View view))
+            if (!(bindable is View view))
             {
                 return;
             }
@@ -42,7 +42,13 @@ namespace ShopMe.Client.Controls.Effects
 
                 view.Effects.Add(new TouchRoutingEffect());
 
-                //if(EffectsConfig.)
+                if (EffectsConfiguration.AutoChildrenInputTransparent && bindable is Layout)
+                {
+                    if (false == EffectsConfiguration.GetChildrenInputTransparent(view))
+                    {
+                        EffectsConfiguration.SetChildrenInputTransparent(view, true);
+                    }
+                }
             }
             else
             {
@@ -52,6 +58,14 @@ namespace ShopMe.Client.Controls.Effects
                 }
 
                 view.Effects.Remove(touchEffect);
+
+                if (EffectsConfiguration.AutoChildrenInputTransparent && bindable is Layout)
+                {
+                    if (EffectsConfiguration.GetChildrenInputTransparent(view))
+                    {
+                        EffectsConfiguration.SetChildrenInputTransparent(view, false);
+                    }
+                }
             }
         }
     }

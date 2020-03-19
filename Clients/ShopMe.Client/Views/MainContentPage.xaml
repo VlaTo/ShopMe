@@ -5,9 +5,10 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:vm="clr-namespace:ShopMe.Client.ViewModels;assembly=ShopMe.Client"
     xmlns:prism="http://prismlibrary.com"
+    xmlns:vm="clr-namespace:ShopMe.Client.ViewModels;assembly=ShopMe.Client"
     xmlns:loc="clr-namespace:ShopMe.Client.Localization;assembly=ShopMe.Client"
+    xmlns:e="clr-namespace:ShopMe.Effects;assembly=ShopMe.Effects"
     mc:Ignorable="d">
     <!--<Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding Path=BackClick, Mode=OneTime}" />
@@ -35,24 +36,24 @@
                         <vm:ListDescriptionViewModel Title="Item 5" />
                     </x:Array>
                 </d:ListView.ItemsSource>
-                <ListView.Behaviors>
+                <!-- <ListView.Behaviors>
                     <prism:EventToCommandBehavior
                         EventName="ItemTapped"
                         Command="{Binding Path=ItemClick, Mode=OneTime}"
                         EventArgsParameterPath="Item"
                     />
-                </ListView.Behaviors>
+                </ListView.Behaviors> -->
                 <ListView.ItemTemplate>
                     <DataTemplate
                         x:DataType="vm:ListDescriptionViewModel">
                         <ViewCell>
                             <SwipeView>
-                                <SwipeView.GestureRecognizers>
+                                <!-- <SwipeView.GestureRecognizers>
                                     <TapGestureRecognizer
                                         NumberOfTapsRequired="1"
                                         Tapped="TapGestureRecognizer_Tapped">
                                     </TapGestureRecognizer>
-                                </SwipeView.GestureRecognizers>
+                                </SwipeView.GestureRecognizers> -->
                                 <SwipeView.LeftItems>
                                     <SwipeItems
                                         SwipeBehaviorOnInvoked="Close"
@@ -76,10 +77,28 @@
                                     <Frame
                                         BackgroundColor="Azure"
                                         BorderColor="DarkGray"
-                                        CornerRadius="2"
-                                        Padding="4"
-                                        Margin="4"
-                                        VerticalOptions="StartAndExpand">
+                                        VerticalOptions="StartAndExpand"
+                                        e:TouchEffect.Color="Green">
+                                        <Frame.Padding>
+                                            <OnPlatform x:TypeArguments="Thickness">
+                                                <On Platform="iOS" Value="4" />
+                                                <On Platform="Android" Value="4" />
+                                                <On Platform="UWP" Value="8" />
+                                            </OnPlatform>
+                                        </Frame.Padding>
+                                        <Frame.Margin>
+                                            <OnPlatform x:TypeArguments="Thickness">
+                                                <On Platform="iOS" Value="4" />
+                                                <On Platform="Android" Value="4" />
+                                                <On Platform="UWP" Value="16, 8" />
+                                            </OnPlatform>
+                                        </Frame.Margin>
+                                        <Frame.CornerRadius>
+                                            <OnPlatform x:TypeArguments="x:Single">
+                                                <On Platform="iOS, Android" Value="4" />
+                                                <On Platform="UWP" Value="4" />
+                                            </OnPlatform>
+                                        </Frame.CornerRadius>
                                         <Grid
                                             RowSpacing="4"
                                             ColumnSpacing="4"

@@ -1,4 +1,4 @@
-﻿using ShopMe.Client.Controls.Interaction;
+﻿using ShopMe.Effects.Interaction;
 
 namespace ShopMe.Client.ViewModels.Contexts
 {

@@ -5,9 +5,22 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com"
+    xmlns:ib="clr-namespace:ShopMe.Effects.Behaviors;assembly=ShopMe.Effects"
+    xmlns:ic="clr-namespace:ShopMe.Effects.Interaction;assembly=ShopMe.Effects"
     mc:Ignorable="d"
     x:Class="ShopMe.Client.Views.ShopListContentPage"
     prism:ViewModelLocator.AutowireViewModel="True">
+    <ContentPage.Behaviors>
+        <ib:InteractionBehavior
+            InteractionRequest="{Binding Path=UpdateShopListDetailsRequest, Mode=OneWay}">
+            <ib:InteractionBehavior.Requests>
+                <ib:OnRequest
+                    x:TypeArguments="ic:InteractionRequestContext"
+                    Raised="OnUpdateShopListRequested"
+                />
+            </ib:InteractionBehavior.Requests>
+        </ib:InteractionBehavior>
+    </ContentPage.Behaviors>
     <ContentPage.Content>
         <StackLayout>
             <Label Text="Welcome to Xamarin.Forms!"

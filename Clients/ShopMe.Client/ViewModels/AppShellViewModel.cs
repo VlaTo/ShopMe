@@ -12,8 +12,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Input;
 using ShopMe.Client.Controls;
-using ShopMe.Client.Controls.Interaction;
 using ShopMe.Client.ViewModels.Contexts;
+using ShopMe.Effects.Interaction;
 using Xamarin.Forms;
 
 namespace ShopMe.Client.ViewModels

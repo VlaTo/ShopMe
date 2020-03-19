@@ -39,5 +39,11 @@ namespace ShopMe.Application
                 return GetChanges();
             });
         }
+
+        public async Task<ShopList> GetShopListAsync(long id, CancellationToken cancellationToken)
+        {
+            var list = await dataProvider.GetShopListAsync(id, cancellationToken);
+            return new ShopList(list.Id, list.Title);
+        }
     }
 }

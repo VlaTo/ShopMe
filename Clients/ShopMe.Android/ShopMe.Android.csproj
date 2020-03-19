@@ -68,7 +68,6 @@
     <PackageReference Include="Prism.Unity.Forms" Version="7.2.0.1422" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Controls\TouchEffectPlatform.cs" />
     <Compile Include="MainActivity.cs" />
     <Compile Include="Resources\Resource.Designer.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -95,6 +94,14 @@
     </AndroidResource>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\..\Library\ShopMe.Effects.Android\ShopMe.Effects.Android.csproj">
+      <Project>{356a4445-812b-49a7-92a9-b6ebb7ea3055}</Project>
+      <Name>ShopMe.Effects.Android</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\..\Library\ShopMe.Effects\ShopMe.Effects.csproj">
+      <Project>{ab8d6105-8fcd-488c-9965-cacd8b014b52}</Project>
+      <Name>ShopMe.Effects</Name>
+    </ProjectReference>
     <ProjectReference Include="..\ShopMe.Client\ShopMe.Client.csproj">
       <Project>{3C40A570-1751-451F-9784-EE7078E20E87}</Project>
       <Name>ShopMe.Client</Name>

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using Prism.Behaviors;
-using ShopMe.Client.Controls.Interaction;
+using ShopMe.Effects.Interaction;
 using Xamarin.Forms;
 
-namespace ShopMe.Client.Controls.Behaviors
+namespace ShopMe.Effects.Behaviors
 {
     /// <summary>
     /// 

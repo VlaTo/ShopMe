@@ -1,5 +1,5 @@
-﻿using ShopMe.Client.Controls.Behaviors;
-using ShopMe.Client.ViewModels.Contexts;
+﻿using ShopMe.Client.ViewModels.Contexts;
+using ShopMe.Effects.Behaviors;
 using Xamarin.Forms;
 using Xamarin.Forms.Xaml;
 

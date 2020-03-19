@@ -5,8 +5,9 @@ using Android.Graphics.Drawables;
 using Android.OS;
 using Android.Views;
 using Android.Widget;
-using ShopMe.Client.Controls.Effects;
-using ShopMe.Droid.Controls;
+using ShopMe.Effects;
+using ShopMe.Effects.Android.Controls;
+using ShopMe.Effects.Android.Controls.GestureCollectors;
 using Xamarin.Forms;
 using Xamarin.Forms.Platform.Android;
 using Color = Android.Graphics.Color;
@@ -16,7 +17,7 @@ using View = Android.Views.View;
 
 [assembly: ExportEffect(typeof(TouchEffectPlatform), nameof(TouchEffect))]
 
-namespace ShopMe.Droid.Controls
+namespace ShopMe.Effects.Android.Controls
 {
     public class TouchEffectPlatform : PlatformEffect
     {
@@ -28,12 +29,13 @@ namespace ShopMe.Droid.Controls
 
         public bool EnableRipple => Build.VERSION.SdkInt >= BuildVersionCodes.Lollipop;
 
-        public bool IsDisposed => (Container as IVisualElementRenderer)?.Element == null;
+        public bool IsDisposed => null == (Container as IVisualElementRenderer)?.Element;
 
         public View View => Control ?? Container;
 
         public static void Init()
         {
+            var temp = nameof(TouchEffect);
             ;
         }
 
@@ -177,7 +179,7 @@ namespace ShopMe.Droid.Controls
         }
         private void ForceStartRipple(float x, float y)
         {
-            if (IsDisposed || false == viewOverlay.Background is RippleDrawable drawable)
+            if (IsDisposed || !(viewOverlay.Background is RippleDrawable drawable))
             {
                 return;
             }

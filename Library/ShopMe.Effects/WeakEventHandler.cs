@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Reflection;
 
-namespace ShopMe.Client.Controls
+namespace ShopMe.Effects
 {
     /// <summary>
     /// 

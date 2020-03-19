@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShopMe.Client.Controls.Interaction
+namespace ShopMe.Effects.Interaction
 {
     /// <summary>
     /// 
@@ -39,6 +39,8 @@ namespace ShopMe.Client.Controls.Interaction
     public class InteractionRequest<TContext> : InteractionRequest
         where TContext : InteractionRequestContext
     {
+        private static Action Stub => () => { };
+
         /// <summary>
         /// 
         /// </summary>
@@ -53,5 +55,11 @@ namespace ShopMe.Client.Controls.Interaction
 
             DoRaise(new InteractionRequestEventArgs(context, callback));
         }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="context"></param>
+        public void Raise(TContext context) => Raise(context, Stub);
     }
 }

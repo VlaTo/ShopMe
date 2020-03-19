@@ -22,6 +22,7 @@ namespace ShopMe.Droid
             );
             Xamarin.Essentials.Platform.Init(this, bundle);
             Xamarin.Forms.Forms.Init(this, bundle);
+            Effects.Android.Controls.Effects.Init();
 
             LoadApplication(new Client.App(new AndroidInitializer()));
         }

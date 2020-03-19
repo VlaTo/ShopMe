@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Library\ShopMe.Effects\ShopMe.Effects.csproj" />
     <ProjectReference Include="..\..\Shared\LibraProgramming.Serialization.Hessian\LibraProgramming.Serialization.Hessian.csproj" />
     <ProjectReference Include="..\..\Shared\RSocket.Core\RSocket.Core.csproj" />
     <ProjectReference Include="..\..\Shared\ShopMe.Application\ShopMe.Application.csproj" />

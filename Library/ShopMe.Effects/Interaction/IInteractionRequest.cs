@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace ShopMe.Client.Controls.Interaction
+namespace ShopMe.Effects.Interaction
 {
     public interface IInteractionRequest
     {

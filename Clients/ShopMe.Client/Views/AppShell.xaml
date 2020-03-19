@@ -6,6 +6,7 @@
     xmlns:d="http://xamarin.com/schemas/2014/forms/design"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:prism="http://prismlibrary.com"
+    xmlns:loc="clr-namespace:ShopMe.Client.Localization;assembly=ShopMe.Client"
     xmlns:views="clr-namespace:ShopMe.Client.Views;assembly=ShopMe.Client"
     xmlns:rc="clr-namespace:ShopMe.Client.ViewModels.Contexts;assembly=ShopMe.Client"
     xmlns:lb="clr-namespace:ShopMe.Client.Behaviors;assembly=ShopMe.Client"
@@ -34,15 +35,15 @@
                 />
                 <StackLayout>
                     <Label
-                        Text="Title"
-                        FontAttributes="Bold"
+                        Text="{x:Static loc:AppResources.ApplicationTitle}"
+                        FontAttributes="None"
                         FontSize="Title"
                         TextColor="White"
                         HorizontalTextAlignment="Start"
                         VerticalTextAlignment="Center"
                     />
                     <Label
-                        Text="Description"
+                        Text="{x:Static loc:AppResources.ApplicationDescription}"
                         FontAttributes="None"
                         FontSize="Subtitle"
                         TextColor="White"

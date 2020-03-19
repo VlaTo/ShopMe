@@ -61,6 +61,24 @@ namespace ShopMe.Client.Localization {
         }
         
         /// <summary>
+        ///   Ищет локализованную строку, похожую на Vestibulum tristique lorem at urna faucibus, id elementum eros volutpat..
+        /// </summary>
+        internal static string ApplicationDescription {
+            get {
+                return ResourceManager.GetString("ApplicationDescription", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Ищет локализованную строку, похожую на Shop Me list.
+        /// </summary>
+        internal static string ApplicationTitle {
+            get {
+                return ResourceManager.GetString("ApplicationTitle", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Ищет локализованную строку, похожую на Completed: .
         /// </summary>
         internal static string ListCompletedLabel {

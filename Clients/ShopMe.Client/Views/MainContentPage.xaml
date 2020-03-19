@@ -230,11 +230,30 @@
                 </ListView.ItemTemplate>
             </ListView>
             <RelativeLayout
-                WidthRequest="100"
-                HeightRequest="100"
+                WidthRequest="74"
+                HeightRequest="70"
                 HorizontalOptions="End"
                 VerticalOptions="End">
-                <Button Text="ADD">
+                <Button
+                    BackgroundColor="DodgerBlue"
+                    WidthRequest="54"
+                    HeightRequest="54"
+                    Text="ADD">
+                    <Button.ImageSource>
+                        <FontImageSource Color=""></FontImageSource>
+                    </Button.ImageSource>
+                    <Button.CornerRadius>
+                        <OnPlatform x:TypeArguments="x:Int32">
+                            <On Platform="iOS" Value="26" />
+                            <On Platform="Android" Value="28" />
+                        </OnPlatform>
+                    </Button.CornerRadius>
+                    <Button.Margin>
+                        <OnPlatform x:TypeArguments="Thickness">
+                            <On Platform="iOS" Value="8" />
+                            <On Platform="Android" Value="8" />
+                        </OnPlatform>
+                    </Button.Margin>
                     <Button.IsVisible>
                         <OnPlatform x:TypeArguments="x:Boolean">
                             <On Platform="iOS" Value="false" />

@@ -24,6 +24,13 @@ namespace ShopMe.Client.ViewModels
         private readonly INavigationService navigation;
         private readonly IInteractionDispatcher dispatcher;
         private IDisposable disposable;
+        private string title;
+
+        public string Title
+        {
+            get => title;
+            set => SetProperty(ref title, value);
+        }
 
         public ObservableCollection<ListDescriptionViewModel> Items
         {

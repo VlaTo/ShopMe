@@ -9,6 +9,7 @@
     xmlns:vm="clr-namespace:ShopMe.Client.ViewModels;assembly=ShopMe.Client"
     xmlns:loc="clr-namespace:ShopMe.Client.Localization;assembly=ShopMe.Client"
     xmlns:e="clr-namespace:ShopMe.Effects;assembly=ShopMe.Effects"
+    xmlns:v="clr-namespace:ShopMe.Client.Views;assembly=ShopMe.Client"
     mc:Ignorable="d">
     <!--<Shell.BackButtonBehavior>
         <BackButtonBehavior Command="{Binding Path=BackClick, Mode=OneTime}" />
@@ -237,10 +238,13 @@
                 <Button
                     BackgroundColor="DodgerBlue"
                     WidthRequest="54"
-                    HeightRequest="54"
-                    Text="ADD">
+                    HeightRequest="54">
                     <Button.ImageSource>
-                        <FontImageSource Color=""></FontImageSource>
+                        <FontImageSource
+                            FontFamily="{x:StaticResource MaterialFontFamily}"
+                            Color="White"
+                            Glyph="{x:Static v:Glyphs.Pencil}"
+                        />
                     </Button.ImageSource>
                     <Button.CornerRadius>
                         <OnPlatform x:TypeArguments="x:Int32">

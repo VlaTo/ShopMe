@@ -10,13 +10,25 @@
     xmlns:loc="clr-namespace:ShopMe.Client.Localization;assembly=ShopMe.Client"
     xmlns:e="clr-namespace:ShopMe.Effects;assembly=ShopMe.Effects"
     xmlns:v="clr-namespace:ShopMe.Client.Views;assembly=ShopMe.Client"
+    xmlns:rc="clr-namespace:ShopMe.Client.ViewModels.Contexts;assembly=ShopMe.Client"
+    xmlns:lb="clr-namespace:ShopMe.Client.Behaviors;assembly=ShopMe.Client"
+    xmlns:ib="clr-namespace:ShopMe.Effects.Behaviors;assembly=ShopMe.Effects"
     mc:Ignorable="d">
-    <!--<Shell.BackButtonBehavior>
-        <BackButtonBehavior Command="{Binding Path=BackClick, Mode=OneTime}" />
-    </Shell.BackButtonBehavior>-->
     <ContentPage.ToolbarItems>
         <ToolbarItem Text="TEST" />
     </ContentPage.ToolbarItems>
+    <ContentPage.Behaviors>
+        <ib:InteractionBehavior
+            InteractionRequest="{Binding Path=OpenCreateNew, Mode=OneWay}">
+            <ib:InteractionBehavior.Requests>
+                <ib:OnRequest
+                    x:TypeArguments="rc:OpenCreateNewRequestContext"
+                    Raised="OnOpenCreateNewRequested"
+                />
+            </ib:InteractionBehavior.Requests>
+        </ib:InteractionBehavior>
+    </ContentPage.Behaviors>
+
     <ContentPage.Content>
         <Grid>
             <ListView
@@ -26,8 +38,8 @@
                 SeparatorVisibility="None"
                 SelectionMode="None"
                 IsPullToRefreshEnabled="True"
-                RefreshCommand="{Binding Path=RefreshList, Mode=OneTime}"
-                RowHeight="80">
+                RefreshCommand="{Binding Path=Refresh, Mode=OneTime}"
+                RowHeight="60">
                 <d:ListView.ItemsSource>
                     <x:Array Type="{x:Type vm:ListDescriptionViewModel}">
                         <vm:ListDescriptionViewModel Title="Item 1" />
@@ -37,13 +49,13 @@
                         <vm:ListDescriptionViewModel Title="Item 5" />
                     </x:Array>
                 </d:ListView.ItemsSource>
-                <!-- <ListView.Behaviors>
+                <ListView.Behaviors>
                     <prism:EventToCommandBehavior
                         EventName="ItemTapped"
                         Command="{Binding Path=ItemClick, Mode=OneTime}"
                         EventArgsParameterPath="Item"
                     />
-                </ListView.Behaviors> -->
+                </ListView.Behaviors>
                 <ListView.ItemTemplate>
                     <DataTemplate
                         x:DataType="vm:ListDescriptionViewModel">
@@ -75,80 +87,59 @@
                                     </SwipeItems>
                                 </SwipeView.RightItems>
                                 <SwipeView.Content>
-                                    <Frame
-                                        BackgroundColor="Azure"
-                                        BorderColor="DarkGray"
-                                        VerticalOptions="StartAndExpand"
-                                        e:TouchEffect.Color="Green">
-                                        <Frame.Padding>
+                                    <Grid
+                                        RowSpacing="0"
+                                        ColumnSpacing="0">
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="*" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <!-- <Grid.GestureRecognizers>
+                                            <TapGestureRecognizer
+                                                NumberOfTapsRequired="1"
+                                                Tapped="TapGestureRecognizer_Tapped">
+                                            </TapGestureRecognizer>
+                                        </Grid.GestureRecognizers> -->
+                                        <Grid.Padding>
                                             <OnPlatform x:TypeArguments="Thickness">
                                                 <On Platform="iOS" Value="4" />
-                                                <On Platform="Android" Value="4" />
-                                                <On Platform="UWP" Value="8" />
-                                            </OnPlatform>
-                                        </Frame.Padding>
-                                        <Frame.Margin>
-                                            <OnPlatform x:TypeArguments="Thickness">
-                                                <On Platform="iOS" Value="4" />
-                                                <On Platform="Android" Value="4" />
-                                                <On Platform="UWP" Value="16, 8" />
-                                            </OnPlatform>
-                                        </Frame.Margin>
-                                        <Frame.CornerRadius>
-                                            <OnPlatform x:TypeArguments="x:Single">
-                                                <On Platform="iOS, Android" Value="4" />
+                                                <On Platform="Android" Value="8, 4" />
                                                 <On Platform="UWP" Value="4" />
                                             </OnPlatform>
-                                        </Frame.CornerRadius>
-                                        <Grid
-                                            RowSpacing="4"
-                                            ColumnSpacing="4"
-                                            VerticalOptions="StartAndExpand">
-                                            <Grid.RowDefinitions>
-                                                <RowDefinition Height="Auto" />
-                                                <RowDefinition Height="Auto" />
-                                            </Grid.RowDefinitions>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="*" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Grid.Padding>
-                                                <OnPlatform x:TypeArguments="Thickness">
-                                                    <On Platform="iOS">0, 20, 0, 0</On>
-                                                    <On Platform="UWP">16</On>
-                                                    <On Platform="Android">4, 8</On>
-                                                </OnPlatform>
-                                            </Grid.Padding>
-                                            <Label
-                                                Grid.Row="0"
-                                                Grid.Column="0"
-                                                Grid.ColumnSpan="2"
-                                                FontAttributes="None"
-                                                FontSize="Subtitle"
-                                                TextType="Text"
-                                                TextDecorations="None"
-                                                
-                                                Text="{Binding Path=Title, Mode=OneWay}" 
-                                                d:Text="{Binding Path=Title}" 
-                                            />
-                                            <Label
-                                                Grid.Row="1"
-                                                Grid.Column="0"
-                                                FontAttributes="None"
-                                                FontSize="Subtitle">
-                                                <Label.FormattedText>
-                                                    <FormattedString>
-                                                        <FormattedString.Spans>
-                                                            <Span FontSize="Micro" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
-                                                            <Span FontSize="Small" Text="4" />
-                                                            <Span FontSize="Micro" Text="/" />
-                                                            <Span FontSize="Micro" Text="6" />
-                                                        </FormattedString.Spans>
-                                                    </FormattedString>
-                                                </Label.FormattedText>
-                                            </Label>
-                                        </Grid>
-                                    </Frame>
+                                        </Grid.Padding>
+                                        <Label
+                                            Grid.Row="0"
+                                            Grid.Column="0"
+                                            Grid.ColumnSpan="2"
+                                            FontAttributes="None"
+                                            FontSize="Subtitle"
+                                            TextType="Text"
+                                            TextDecorations="None"
+                                            LineBreakMode="TailTruncation"
+                                            Text="{Binding Path=Title, Mode=OneWay}" 
+                                            d:Text="{Binding Path=Title}" 
+                                        />
+                                        <Label
+                                            Grid.Row="1"
+                                            Grid.Column="0"
+                                            FontAttributes="None"
+                                            FontSize="Subtitle">
+                                            <Label.FormattedText>
+                                                <FormattedString>
+                                                    <FormattedString.Spans>
+                                                        <Span FontSize="Micro" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
+                                                        <Span FontSize="Small" Text="4" />
+                                                        <Span FontSize="Small" Text="/" />
+                                                        <Span FontSize="Small" Text="6" />
+                                                    </FormattedString.Spans>
+                                                </FormattedString>
+                                            </Label.FormattedText>
+                                        </Label>
+                                    </Grid>
                                 </SwipeView.Content>
                                 <SwipeView.Margin>
                                     <OnPlatform x:TypeArguments="Thickness">
@@ -237,6 +228,7 @@
                 VerticalOptions="End">
                 <Button
                     BackgroundColor="DodgerBlue"
+                    Command="{Binding Path=CreateNew, Mode=OneTime}"
                     WidthRequest="54"
                     HeightRequest="54">
                     <Button.ImageSource>

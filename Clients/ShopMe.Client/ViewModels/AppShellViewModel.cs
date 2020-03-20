@@ -47,7 +47,7 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
-        public Command RefreshList
+        public Command Refresh
         {
             get;
         }
@@ -57,7 +57,22 @@ namespace ShopMe.Client.ViewModels
             get;
         }
 
+        public Command CreateNew
+        {
+            get;
+        }
+
+        public Command<ListDescriptionViewModel> ItemClick
+        {
+            get;
+        }
+
         public InteractionRequest<OpenShopListRequestContext> OpenDetailsRequired
+        {
+            get;
+        }
+
+        public InteractionRequest<OpenCreateNewRequestContext> OpenCreateNew
         {
             get;
         }
@@ -75,10 +90,13 @@ namespace ShopMe.Client.ViewModels
 
             Items = new ObservableCollection<ListDescriptionViewModel>();
             LatestItems = new ObservableCollection<ListDescriptionViewModel>();
-            OpenDetails = new Command<ListDescriptionViewModel>(OnOpenDetails);
-            GoBack = new Command(OnBackButton);
-            RefreshList = new Command(OnRefreshList);
+            OpenDetails = new Command<ListDescriptionViewModel>(DoOpenDetails);
+            CreateNew = new Command(DoCreateNew);
+            GoBack = new Command(DoBackButton);
+            Refresh = new Command(DoRefresh);
+            ItemClick = new Command<ListDescriptionViewModel>(DoItemClick);
             OpenDetailsRequired = new InteractionRequest<OpenShopListRequestContext>();
+            OpenCreateNew = new InteractionRequest<OpenCreateNewRequestContext>();
         }
 
         public void Initialize(INavigationParameters parameters)
@@ -141,17 +159,40 @@ namespace ShopMe.Client.ViewModels
              */
         }
 
-        private async void OnBackButton()
+        private async void DoCreateNew()
+        {
+            var complete = new TaskCompletionSource<bool>();
+
+            OpenCreateNew.Raise(
+                new OpenCreateNewRequestContext(complete),
+                () =>
+                {
+                    complete.SetResult(true);
+                }
+            );
+
+            await complete.Task;
+
+            Debug.WriteLine("[AppShellViewModel.DoCreateNew] Completed");
+        }
+
+        private async void DoBackButton()
         {
             await navigation.GoBackAsync();
         }
 
-        private async void OnRefreshList()
+        private async void DoRefresh()
         {
+
             await Task.Delay(TimeSpan.FromMilliseconds(600.0d));
         }
 
-        private void OnOpenDetails(ListDescriptionViewModel item)
+        private void DoItemClick(ListDescriptionViewModel obj)
+        {
+            Debug.WriteLine("[AppShellViewModel.DoItemClick] Click");
+        }
+
+        private void DoOpenDetails(ListDescriptionViewModel item)
         {
             if (null == item)
             {

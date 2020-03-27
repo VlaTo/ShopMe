@@ -33,7 +33,8 @@
         <Grid>
             <ListView
                 ItemsSource="{Binding Path=Items, Mode=OneWay}"
-                IsGroupingEnabled="False"
+                IsGroupingEnabled="True"
+                GroupDisplayBinding="{Binding Path=Title, Mode=OneTime}"
                 CachingStrategy="RecycleElement"
                 SeparatorVisibility="None"
                 SelectionMode="None"
@@ -49,175 +50,23 @@
                         <vm:ListDescriptionViewModel Title="Item 5" />
                     </x:Array>
                 </d:ListView.ItemsSource>
-                <ListView.Behaviors>
-                    <prism:EventToCommandBehavior
-                        EventName="ItemTapped"
-                        Command="{Binding Path=ItemClick, Mode=OneTime}"
-                        EventArgsParameterPath="Item"
-                    />
-                </ListView.Behaviors>
+                <ListView.GroupHeaderTemplate>
+                    <DataTemplate x:DataType="vm:ListGroupViewModel">
+                        <TextCell
+                            TextColor="DimGray"
+                            Text="{Binding Path=Title, Mode=OneTime}"
+                        />
+                    </DataTemplate>
+                </ListView.GroupHeaderTemplate>
                 <ListView.ItemTemplate>
-                    <DataTemplate
-                        x:DataType="vm:ListDescriptionViewModel">
-                        <ViewCell>
-                            <SwipeView>
-                                <!-- <SwipeView.GestureRecognizers>
-                                    <TapGestureRecognizer
-                                        NumberOfTapsRequired="1"
-                                        Tapped="TapGestureRecognizer_Tapped">
-                                    </TapGestureRecognizer>
-                                </SwipeView.GestureRecognizers> -->
-                                <SwipeView.LeftItems>
-                                    <SwipeItems
-                                        SwipeBehaviorOnInvoked="Close"
-                                        Mode="Execute">
-                                        <SwipeItem
-                                            BackgroundColor="Red"
-                                            Command="{Binding Path=Remove, Mode=OneTime}"
-                                            Text="Delete"
-                                        />
-                                    </SwipeItems>
-                                </SwipeView.LeftItems>
-                                <SwipeView.RightItems>
-                                    <SwipeItems>
-                                        <SwipeItem
-                                            BackgroundColor="Green"
-                                            Command="{Binding Path=Complete, Mode=OneTime}"
-                                        />
-                                    </SwipeItems>
-                                </SwipeView.RightItems>
-                                <SwipeView.Content>
-                                    <Grid
-                                        RowSpacing="0"
-                                        ColumnSpacing="0">
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="*" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <!-- <Grid.GestureRecognizers>
-                                            <TapGestureRecognizer
-                                                NumberOfTapsRequired="1"
-                                                Tapped="TapGestureRecognizer_Tapped">
-                                            </TapGestureRecognizer>
-                                        </Grid.GestureRecognizers> -->
-                                        <Grid.Padding>
-                                            <OnPlatform x:TypeArguments="Thickness">
-                                                <On Platform="iOS" Value="4" />
-                                                <On Platform="Android" Value="8, 4" />
-                                                <On Platform="UWP" Value="4" />
-                                            </OnPlatform>
-                                        </Grid.Padding>
-                                        <Label
-                                            Grid.Row="0"
-                                            Grid.Column="0"
-                                            Grid.ColumnSpan="2"
-                                            FontAttributes="None"
-                                            FontSize="Subtitle"
-                                            TextType="Text"
-                                            TextDecorations="None"
-                                            LineBreakMode="TailTruncation"
-                                            Text="{Binding Path=Title, Mode=OneWay}" 
-                                            d:Text="{Binding Path=Title}" 
-                                        />
-                                        <Label
-                                            Grid.Row="1"
-                                            Grid.Column="0"
-                                            FontAttributes="None"
-                                            FontSize="Subtitle">
-                                            <Label.FormattedText>
-                                                <FormattedString>
-                                                    <FormattedString.Spans>
-                                                        <Span FontSize="Micro" Text="{x:Static loc:AppResources.ListCompletedLabel}" />
-                                                        <Span FontSize="Small" Text="4" />
-                                                        <Span FontSize="Small" Text="/" />
-                                                        <Span FontSize="Small" Text="6" />
-                                                    </FormattedString.Spans>
-                                                </FormattedString>
-                                            </Label.FormattedText>
-                                        </Label>
-                                    </Grid>
-                                </SwipeView.Content>
-                                <SwipeView.Margin>
-                                    <OnPlatform x:TypeArguments="Thickness">
-                                        <On Platform="iOS" Value="4" />
-                                        <On Platform="Android" Value="4" />
-                                        <On Platform="UWP" Value="4" />
-                                    </OnPlatform>
-                                </SwipeView.Margin>
-                            </SwipeView>
-                        </ViewCell>
-                        <!-- <ViewCell>
-                        <SwipeView>
-                            <SwipeView.GestureRecognizers>
-                                <TapGestureRecognizer
-                                    NumberOfTapsRequired="1"
-                                    Tapped="TapGestureRecognizer_Tapped">
-                                </TapGestureRecognizer>
-                            </SwipeView.GestureRecognizers>
-                            <SwipeView.LeftItems>
-                                <SwipeItems
-                                    Mode="Execute">
-                                    <SwipeItem
-                                        Text="Delete"
-                                        Command="{Binding Path=Delete, Mode=OneTime}"
-                                    />
-                                </SwipeItems>
-                            </SwipeView.LeftItems>
-                            <SwipeView.RightItems>
-                                <SwipeItems
-                                    Mode="Reveal">
-                                    <SwipeItem
-                                        Text="Test"
-                                        Command="{Binding Path=Execute, Mode=OneTime}"
-                                    />
-                                </SwipeItems>
-                            </SwipeView.RightItems>
-                            <SwipeView.Content>
-                                <Grid 
-                                    Padding="16">
-                                    <Grid.ColumnDefinitions>
-                                        <ColumnDefinition Width="Auto" />
-                                        <ColumnDefinition Width="*" />
-                                    </Grid.ColumnDefinitions>
-                                    <Grid.RowDefinitions>
-                                        <RowDefinition Height="Auto" />
-                                        <RowDefinition Height="*" />
-                                    </Grid.RowDefinitions>
-                                    <Image
-                                        Grid.Column="0"
-                                        Grid.Row="0"
-                                        Grid.RowSpan="2"
-                                    />
-                                    <Label
-                                        Grid.Row="0"
-                                        Grid.Column="1"
-                                        FontAttributes="None"
-                                        FontSize="Subtitle"
-                                        Text="{Binding Path=Title, Mode=OneWay}" 
-                                        d:Text="{Binding Path=Title}" 
-                                    />
-                                    <Label
-                                        Grid.Row="1"
-                                        Grid.Column="1"
-                                        FontAttributes="None"
-                                        FontSize="Default">
-                                        <Label.FormattedText>
-                                            <FormattedString>
-                                                <FormattedString.Spans>
-                                                    <Span Text="{x:Static loc:AppResources.ListCompletedLabel}" />
-                                                    <Span Text="{Binding Path=Progress, StringFormat='{0:P}', Mode=OneWay}"/>
-                                                </FormattedString.Spans>
-                                            </FormattedString>
-                                        </Label.FormattedText>
-                                    </Label>
-                                </Grid>
-                            </SwipeView.Content>
-                        </SwipeView>
-                    </ViewCell> -->
+                    <DataTemplate x:DataType="vm:ListDescriptionViewModel">
+                        <TextCell
+                            TextColor="Black"
+                            DetailColor="DimGray"
+                            Command="{Binding Path=OpenDetails, Mode=OneTime}"
+                            Text="{Binding Path=Title, Mode=OneWay}"
+                            Detail="{Binding Path=Created, StringFormat='{0:M}', Mode=OneWay}"
+                        />
                     </DataTemplate>
                 </ListView.ItemTemplate>
             </ListView>

@@ -2,7 +2,6 @@
 using Prism.Navigation;
 using System;
 using System.Diagnostics;
-using System.Windows.Input;
 using Xamarin.Forms;
 
 namespace ShopMe.Client.ViewModels
@@ -13,6 +12,7 @@ namespace ShopMe.Client.ViewModels
         private string title;
         private double progress;
         private bool completed;
+        private DateTimeOffset created;
 
         public long Id
         {
@@ -37,6 +37,12 @@ namespace ShopMe.Client.ViewModels
             set => SetProperty(ref completed, value);
         }
 
+        public DateTimeOffset Created
+        {
+            get => created;
+            set => SetProperty(ref created, value);
+        }
+
         public Command OpenDetails
         {
             get;
@@ -54,7 +60,7 @@ namespace ShopMe.Client.ViewModels
 
         public ListDescriptionViewModel()
         {
-            OpenDetails = new Command(DoExecuteCommand);
+            OpenDetails = new Command(DoOpenDetails);
             Remove = new Command(DoRemoveCommand);
             Complete = new Command(DoComplete);
         }
@@ -66,7 +72,7 @@ namespace ShopMe.Client.ViewModels
             this.navigation = navigation;
         }
 
-        private void DoExecuteCommand()
+        private void DoOpenDetails()
         {
             //await DisplayAlert("Item Tapped", "An item was tapped.", "OK");
             Debug.WriteLine($"[ShopListDescriptionViewModel.DoExecuteCommand] Id: {Id}, Title: {Title}");

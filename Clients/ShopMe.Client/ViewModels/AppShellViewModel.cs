@@ -32,7 +32,7 @@ namespace ShopMe.Client.ViewModels
             set => SetProperty(ref title, value);
         }
 
-        public ObservableCollection<ListDescriptionViewModel> Items
+        public ObservableCollection<ListGroupViewModel> Items
         {
             get;
         }
@@ -88,7 +88,7 @@ namespace ShopMe.Client.ViewModels
 
             disposable = Disposable.Empty;
 
-            Items = new ObservableCollection<ListDescriptionViewModel>();
+            Items = new ObservableCollection<ListGroupViewModel>();
             LatestItems = new ObservableCollection<ListDescriptionViewModel>();
             OpenDetails = new Command<ListDescriptionViewModel>(DoOpenDetails);
             CreateNew = new Command(DoCreateNew);
@@ -119,13 +119,33 @@ namespace ShopMe.Client.ViewModels
             {
                 if (0 < changes.Added.Length)
                 {
+                    var latest = new ListGroupViewModel
+                    {
+                        Title = "Test"
+                    };
+
+                    var completed = new ListGroupViewModel
+                    {
+                        Title = "Completed"
+                    };
+
+                    Items.Add(latest);
+                    Items.Add(completed);
+
                     for (var index = 0; index < changes.Added.Length; index++)
                     {
                         var description = changes.Added[index];
 
-                        Items.Add(new ListDescriptionViewModel(description.Id, navigation)
+                        latest.Add(new ListDescriptionViewModel(description.Id, navigation)
                         {
-                            Title = description.Title
+                            Title = description.Title,
+                            Created = DateTimeOffset.Now
+                        });
+
+                        completed.Add(new ListDescriptionViewModel(description.Id, navigation)
+                        {
+                            Title = description.Title,
+                            Created = DateTimeOffset.Now
                         });
                     }
                 }

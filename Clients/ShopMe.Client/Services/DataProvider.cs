@@ -42,6 +42,8 @@ namespace ShopMe.Client.Services
             yield return GetShopListDescription(3);
             yield return GetShopListDescription(4);
             yield return GetShopListDescription(5);
+            yield return GetShopListDescription(6);
+            yield return GetShopListDescription(7);
 
             /*
              * Aliquam imperdiet ac odio sed efficitur. Vestibulum tristique lorem at urna faucibus, id elementum eros volutpat.
@@ -95,9 +97,19 @@ namespace ShopMe.Client.Services
                     return new ShopListDescription(id, "Mauris ullamcorper pretium");
                 }
 
+                case 6:
+                {
+                    return new ShopListDescription(id, "Malesuada fames ac ante ipsum");
+                }
+
+                case 7:
+                {
+                    return new ShopListDescription(id, "Pharetra sollicitudin");
+                }
+
                 default:
                 {
-                    return new ShopListDescription(id, "Quisque et viverra diam");
+                    return new ShopListDescription(id, "Quisque lobortis");
                 }
             }
         }
